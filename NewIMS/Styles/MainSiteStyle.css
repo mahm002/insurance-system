@@ -1,0 +1,599 @@
+﻿body {
+}
+
+.modalBackground {
+    background-color: Gray;
+    filter: alpha(opacity=50);
+    opacity: 0.5;
+}
+
+.modalBox {
+    background-color: #f5f5f5;
+    border-width: 3px;
+    border-style: solid;
+    border-color: Blue;
+    padding: 3px;
+}
+
+    .modalBox caption {
+        background-image: url(images/window_titlebg.gif);
+        background-repeat: repeat-x;
+    }
+
+/* tweb modal dialog styles */
+.modalPanelTitle td {
+    padding: 3px;
+    font-weight: bold;
+    font-size: 0.9em;
+    background-image: url(images/window_titlebg.gif);
+    cursor: pointer;
+    color: black;
+    font-family: Verdana;
+    width: 100%;
+    height: 30px;
+    background-color: #6f90dc;
+}
+
+.modalPanel {
+    z-index: 500;
+    width: 500px;
+    border: solid 1px #275473;
+    position: absolute;
+    border-collapse: collapse;
+    background-color: #f0faff;
+}
+
+    .modalPanel td {
+        vertical-align: top;
+    }
+
+.titleIcon {
+    padding-right: 20px;
+}
+
+.ArabicForm {
+    direction: rtl;
+    font-family: Times New Roman (Arabic);
+}
+
+.EngTD {
+    direction: ltr;
+    text-align: left;
+}
+
+.BorderTD {
+    border-top: 1px solid #6699cc;
+    border-bottom: 1px solid #6699cc;
+    color: #6699cc;
+    background: #FFFFFF;
+    font: 11px Tahoma, Verdana, Helvetica-Narrow, Helvetica, sans-serif;
+    font-size: xx-small;
+}
+
+.Line {
+    border-bottom: solid #6699cc;
+    background: #FFFFFF;
+}
+
+.PremText {
+    border: solid 1 black;
+    text-align: right;
+    font-family: Arial;
+}
+
+.Caption {
+    border-left: 1px solid #000000;
+    border-right: 0px solid #000000;
+    border-top: 0px solid #000000;
+    border-bottom: 1px solid #000000;
+    background: transparent url(images/tilebg_tablecaption1.gif) 0px 0px repeat-x;
+    text-align: center;
+    font-size: 14px;
+    font-family: arial;
+    font-weight: bold;
+    color: #ffffff;
+    height: 30px;
+}
+
+.CaptionMT {
+    border-left: 1px solid #000000;
+    border-right: 0px solid #000000;
+    border-top: 0px solid #000000;
+    border-bottom: 1px solid #000000;
+    background: transparent url(images/hmenu.jpg) 0px 0px repeat-x;
+    text-align: center;
+    font-size: 14px;
+    font-family: arial;
+    font-weight: bold;
+    color: #ffffff;
+    height: 20px;
+}
+
+.CaptionRED {
+    border-left: 1px solid #000000;
+    border-right: 0px solid #000000;
+    border-top: 0px solid #000000;
+    border-bottom: 1px solid #000000;
+    background: transparent url(../images/GlossyRed.png) 0px 0px repeat-x;
+    text-align: center;
+    font-size: 14px;
+    font-family: arial;
+    font-weight: bold;
+    color: #ffffff;
+    height: 30px;
+}
+
+.CaptionM {
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px 10px;
+    border-radius: 10px;
+    border-left: 1px solid #000000;
+    border-right: 0px solid #000000;
+    border-top: 0px solid #000000;
+    border-bottom: 1px solid #000000;
+    background: transparent url(images/dashboard_h_bg_hover.png) 0px 0px repeat-x;
+    text-align: center;
+    font-size: 14px;
+    font-family: arial;
+    font-weight: bold;
+    color: #6C7B30;
+    height: 29px;
+}
+
+border-bottom-color:Gray {
+}
+
+.PremText1 {
+    border: solid 1 MidnightBlue;
+    text-align: right;
+    font-family: Arial;
+}
+
+.BlueButton {
+    border: solid 2 steelblue;
+    background: #6699cc;
+    cursor: hand;
+    color: White;
+}
+
+.waitingdiv {
+    font-size: 93%;
+    margin-bottom: 1em;
+    margin-top: 0.2em;
+    padding: 8px 12px;
+    text-align: right;
+}
+
+#form1 {
+    width: 100%;
+}
+
+.mGrid {
+    width: 100%;
+    background-color: #fff;
+    margin: 5px 0 10px 0;
+    border: solid 1px #525252;
+    border-collapse: collapse;
+}
+
+    .mGrid td {
+        padding: 2px;
+        border: solid 1px #c1c1c1;
+        color: #717171;
+    }
+
+    .mGrid th {
+        padding: 4px 2px;
+        color: #fff;
+        background: #424242 url(grd_head.png) repeat-x top;
+        border-left: solid 1px #525252;
+        font-size: 0.9em;
+    }
+
+    .mGrid .alt {
+        background: #fcfcfc url(grd_alt.png) repeat-x top;
+    }
+
+    .mGrid .pgr {
+        background: #424242 url(grd_pgr.png) repeat-x top;
+    }
+
+        .mGrid .pgr table {
+            margin: 5px 0;
+        }
+
+        .mGrid .pgr td {
+            border-width: 0;
+            padding: 0 6px;
+            border-left: solid 1px #666;
+            font-weight: bold;
+            color: #fff;
+            line-height: 12px;
+        }
+
+        .mGrid .pgr a {
+            color: #666;
+            text-decoration: none;
+        }
+
+            .mGrid .pgr a:hover {
+                color: #000;
+                text-decoration: none;
+            }
+/* ---------------------- Dolphin nav ---------------------- */
+#dolphincontainer {
+    position: inherit;
+    height: 56px;
+    color: #E0E0E0;
+    background: #143D55;
+    width: 100%;
+    font-family: Helvetica,Arial,Verdana,sans-serif;
+}
+
+#dolphinnav {
+    position: inherit;
+    height: 33px;
+    font-size: 12px;
+    text-transform: uppercase;
+    font-weight: bold;
+    background: #fff url(images/dolphin_bg.gif) repeat-x bottom left;
+    padding: 0 0 0 20px;
+}
+
+    #dolphinnav ul {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+        width: auto;
+        float: right;
+    }
+
+        #dolphinnav ul li {
+            display: block;
+            float: right;
+            margin: 0 1px;
+        }
+
+            #dolphinnav ul li a {
+                display: block;
+                float: right;
+                color: #EAF3F8;
+                text-decoration: none;
+                padding: 0 0 0 20px;
+                height: 33px;
+            }
+
+                #dolphinnav ul li a span {
+                    padding: 12px 20px 0 0;
+                    height: 21px;
+                    float: right;
+                    width: 771px;
+                }
+
+                #dolphinnav ul li a:hover {
+                    color: #fff;
+                    background: transparent url(images/dolphin_bg-OVER.gif) repeat-x bottom left;
+                }
+
+                    #dolphinnav ul li a:hover span {
+                        display: block;
+                        width: auto;
+                        cursor: pointer;
+                    }
+
+                #dolphinnav ul li a.current, #dolphinnav ul li a.current:hover {
+                    color: #fff;
+                    background: #1D6893 url('images/dolphin_left-ON.gif') no-repeat left top;
+                    line-height: 275%;
+                    width: 902px;
+                }
+
+                    #dolphinnav ul li a.current span {
+                        display: block;
+                        padding: 0 20px 0 0;
+                        width: auto;
+                        background: #1D6893 url(images/dolphin_right-ON.gif) no-repeat top right;
+                        height: 33px;
+                    }
+
+#loading {
+    position: fixed;
+    left: 48%;
+    top: 48%;
+    display: none;
+}
+
+#login-box {
+    width: 483px;
+    height: 403px;
+    /*padding: 58px 76px 0
+ #login-box {
+	width:484px;
+	height: 403px;
+	/*padding: 58px 76px 0 76px;*/
+    color: #ebebeb;
+    font: 12px Arial, Helvetica, sans-serif;
+    background: url(images/login-box-backg.png) no-repeat left top;
+}
+
+.captionaja, table caption {
+    background-color: Gray;
+    background-image: url('images/tilebg_tablecaption.gif');
+    color: White;
+    font-size: 15pt;
+    font-weight: normal;
+    border: 0;
+    border-bottom: solid 1px #737373;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.clearer {
+    clear: both;
+    overflow: hidden;
+    background-color: transparent;
+    filter: alpha(opacity=0);
+    opacity: 0.0;
+    height: 1px;
+    margin: 1px 1px 1px 1px;
+    max-height: 2px;
+}
+
+.divCol {
+    font-weight: bold;
+    float: left;
+    width: 120px;
+    text-align: right;
+    margin-right: 10px;
+    white-space: nowrap;
+}
+/*no width on the last col so it will expand*/
+.divColLast {
+    float: left;
+    white-space: nowrap;
+}
+
+ft top {
+}
+
+#ctl00_Image1, #ctl00_Image2, #ctl00_BannerFade {
+    display: block
+}
+
+body {
+    font: .7em Verdana,Tahoma,Arial,Helvetica, sans-serif;
+}
+
+a {
+    color: #3366CC;
+}
+
+.blue {
+    color: #3366CC;
+}
+
+a.headerlink {
+    color: black;
+    text-decoration: none
+}
+
+a:hover {
+    color: #1D489E;
+    text-decoration: none;
+}
+
+ul {
+    list-style: url(../images/bullet.gif) outside;
+}
+
+table.bulletlist li {
+    list-style: url(../images/bullet.gif)
+}
+
+td.toolbar {
+    color: gray;
+    background: black;
+    font: 11px Tahoma, Verdana, Helvetica-Narrow, Helvetica, sans-serif;
+}
+
+.bar {
+    font: tahoma normal 8px;
+    border-bottom: solid 1px #8a9db5;
+    width: 100%;
+    color: gray;
+    background: #b9c4d2;
+}
+
+a.toolbar {
+    color: gray;
+    font: 11px Tahoma, Verdana, Helvetica-Narrow, Helvetica, sans-serif;
+    text-decoration: none;
+}
+
+td.mainbody {
+    padding-top: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+table.table {
+    font-size: 1em;
+}
+
+/* no longer needed */
+span.subhead {
+}
+
+span.header {
+}
+
+table.table pre {
+}
+
+div.code pre {
+}
+
+td.code {
+}
+
+td.caption {
+}
+
+span.caption {
+    font-style: italic;
+    margin-top: 5;
+}
+
+table.table th {
+    padding-left: 5px;
+    background: #DADADA;
+    text-align: left;
+}
+
+/* not sure what this is used for */
+table.table {
+    width: 100%;
+}
+
+    table.table td {
+        padding: 5px 5px 10px;
+        vertical-align: top;
+        background: #F1F1F1;
+    }
+
+.code {
+    overflow: auto;
+    width: 98%;
+    padding: 1px; /* was 3px */
+    color: #669933;
+    font-size: 1.2em;
+    background-color: #F0F0F0;
+    font-family: courier-new; /* added */
+}
+
+pre.code {
+    overflow: auto;
+    width: 98%;
+    padding: 10px; /* was 3px */
+    color: #669933;
+    font-size: 1.1em;
+    background-color: #F0F0F0;
+    font-family: courier-new; /* added */
+    border: 1px solid #DADADA;
+}
+
+code {
+    color: #669933;
+    font-size: 1.2em;
+    font-family: courier new;
+}
+
+.code pre {
+    font-size: 1em;
+}
+
+div.indent {
+    padding-left: 25px;
+}
+
+/*
+new design styles from Kevin below
+*/
+h1 {
+    display: inline;
+    font-size: 14px;
+    direction: ltr;
+}
+
+h2 {
+    font-size: 1.6em;
+}
+
+h3 {
+    font-size: 1.1em;
+}
+
+    h3.inline {
+        font-size: 1em;
+        display: inline;
+    }
+
+div.inline {
+    padding-bottom: 3px;
+}
+
+    div.inline h3 {
+        display: inline;
+    }
+
+h4 {
+    font-size: 1em;
+}
+
+h5 {
+    font-size: 1em;
+}
+
+td.homephoto, td.nav {
+    color: #3366CC;
+    border-right: 1px solid #D7D7D7;
+    border-left: 1px solid gray;
+    background-image: url(../images/FrameBack.JPG);
+    background-repeat: repeat-x;
+    width: 231px;
+    padding: 10px;
+    font-family: Tahoma, Verdana, Helvetica-Narrow, Helvetica, sans-serif;
+}
+
+td.homephoto {
+    padding: 0px;
+}
+
+td.bannerbg {
+    background: #2E5CB8;
+}
+
+.sectiontitle {
+    color: #FFFFFF;
+    padding: 5px;
+    border-bottom: 3px solid #FFFFFF;
+    font-family: Tahoma, Verdana, Helvetica-Narrow, Helvetica, sans-serif;
+    background: #3366CC;
+}
+
+.gridhead {
+    background-image: url(../images/obs_bkg.png);
+    background-repeat: repeat-x;
+    font-family: Tahoma;
+    font-size: 10;
+    font-style: normal;
+    color: Silver;
+}
+
+.new {
+    color: #663333;
+    border: 1px solid #ECA67D;
+    padding: 10px;
+    width: 97%;
+    background: #FFFCD6;
+}
+
+.newinline {
+    font-weight: bold;
+    font-size: 9px;
+    color: #FF3300;
+    border: 1px solid #ECA67D;
+    padding: 0px 2px;
+    background: #F6F4C3;
+}
+
+.runview {
+    margin-left: 30px;
+    border-left: 1px solid #C1C1C1;
+    padding: 3px 0px 0px 15px;
+    font-weight: bold;
+}
+
+.footer {
+    color: #B2B2B2;
+}

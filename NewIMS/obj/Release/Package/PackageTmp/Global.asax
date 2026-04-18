@@ -1,0 +1,1 @@
+﻿<%@ Application Language="VB" Inherits="Global_asax" %>

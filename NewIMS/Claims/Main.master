@@ -1,0 +1,101 @@
+﻿<%@ Master Language="VB" Inherits="TakafulyIMS.Main" Codebehind="Main.master.vb" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<%@ Register Assembly="DevExpress.Web.v21.2, Version=21.2.15.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"
+    Namespace="DevExpress.Web" TagPrefix="dx" %>
+
+
+
+
+
+
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <asp:ContentPlaceHolder id="head" runat="server">
+    </asp:ContentPlaceHolder>
+
+</head>
+<body>
+    <form id="form1" runat="server">
+    <div style="margin-top: 0px">
+        <dx:ASPxSplitter ID="ASPxSplitter1" runat="server" Orientation="Vertical" 
+            RightToLeft="True" FullscreenMode="True" Height="100%" Width="100%" SeparatorSize="1px" ShowSeparatorImage="False" style="margin-top: 15px" >
+            <Panes>
+                <dx:SplitterPane Name="Header" MaxSize="40" >
+                    <ContentCollection>
+                        <dx:SplitterContentControl ID="SplitterContentControl2" runat="server" SupportsDisabledAttribute="True">
+                        </dx:SplitterContentControl>
+                </ContentCollection>
+                </dx:SplitterPane>
+                <dx:SplitterPane Name="Menu" MaxSize="40">
+                    <ContentCollection>
+                        <dx:SplitterContentControl ID="SplitterContentControl1" runat="server" SupportsDisabledAttribute="True">
+                            <dx:ASPxMenu ID="ASPxMenu1" runat="server" AutoSeparators="RootOnly" CssFilePath="~/App_Themes/PlasticBlue/{0}/styles.css" CssPostfix="PlasticBlue" Height="100%" SpriteCssFilePath="~/App_Themes/PlasticBlue/{0}/sprite.css" Font-Names="arial" Font-Size="12pt" Font-Bold="true" Theme="PlasticBlue" Width="100%" EnableTheming="True" RightToLeft="True">
+
+    <SubMenuStyle GutterImageSpacing="9px" GutterWidth="3px"></SubMenuStyle>
+                                <Items>
+                                    <dx:MenuItem Text="إدارة الوثائق" NavigateUrl="~/PolicyManagement/Default.aspx">
+                                    </dx:MenuItem>
+                                    <dx:MenuItem Text="الزبائن والوكلاء" NavigateUrl="~/Customers/CustomersPage.aspx">
+                                    </dx:MenuItem>
+                                    <dx:MenuItem Text="المطالبات والحوادث" NavigateUrl="~/ClaimsManage/Default.aspx">
+                                    </dx:MenuItem>
+                                    <dx:MenuItem Text="الأقساط والحسابات" NavigateUrl="~/Account/default.aspx">
+                                    </dx:MenuItem>
+                                    <dx:MenuItem Text="الإعادة والإتفاقيات" NavigateUrl="~/Reinsurance/default.aspx">
+                                    </dx:MenuItem>
+                                    <dx:MenuItem Text="إدارة النظام" NavigateUrl="~/SystemManag/default.aspx">
+                                    </dx:MenuItem>
+                                </Items>
+                                <LoadingPanelImage Url="~/App_Themes/PlasticBlue/Web/Loading.gif">
+                                </LoadingPanelImage>
+
+<ItemSubMenuOffset FirstItemX="2" LastItemX="2" X="2" firstitemy="-1" lastitemy="-1" y="-1"></ItemSubMenuOffset>
+
+                                <rootitemsubmenuoffset firstitemx="1" lastitemx="1" x="1" />
+
+                                <ItemStyle DropDownButtonSpacing="13px" ToolbarDropDownButtonSpacing="5px" ToolbarPopOutImageSpacing="5px" />
+                                <SubMenuStyle GutterWidth="0px" />
+
+                            </dx:ASPxMenu>                        </dx:SplitterContentControl>
+                </ContentCollection>
+                </dx:SplitterPane>
+                <dx:SplitterPane Name="Body">                
+                    <ContentCollection>                   
+                        <dx:SplitterContentControl runat="server" SupportsDisabledAttribute="True">
+                        <dx:ASPxSplitter ID="ASPxSplitter2" runat="server"  
+                                Height="100%" Width="100%"  SeparatorSize="1px" ShowSeparatorImage="False" >
+                            <Panes>
+                                <dx:SplitterPane MaxSize="210px" MinSize="210px" Name="Nav">
+                                    <ContentCollection>
+                                        <dx:SplitterContentControl runat="server"  SupportsDisabledAttribute="True">
+                                            <asp:ContentPlaceHolder id="Nav"  runat="server">
+                                            </asp:ContentPlaceHolder>
+                                        </dx:SplitterContentControl>
+                                    </ContentCollection>
+                                    <PaneStyle>
+                                        <Paddings Padding="4px" />
+                                    </PaneStyle>
+                                </dx:SplitterPane>
+                                <dx:SplitterPane Name="Data" ScrollBars="Vertical">
+                                    <ContentCollection>
+                                        <dx:SplitterContentControl runat="server" SupportsDisabledAttribute="True">
+                                            <asp:ContentPlaceHolder id="Data" runat="server">
+                                            </asp:ContentPlaceHolder>
+                                        </dx:SplitterContentControl>
+                                    </ContentCollection>
+                                </dx:SplitterPane>
+                            </Panes>
+                        </dx:ASPxSplitter>
+                        </dx:SplitterContentControl>
+                    </ContentCollection>
+                </dx:SplitterPane>
+            </Panes>
+        </dx:ASPxSplitter>
+    </div>
+    </form>
+</body>
+</html>

@@ -1,0 +1,491 @@
+﻿<%@ Page Title="" Language="VB" MasterPageFile="main.master" AutoEventWireup="false" Inherits="TakafulyIMS.ClaimsManage_MainClaims" Codebehind="MainClaims.aspx.vb" %>
+<%@ Register TagPrefix="dx" Namespace="DevExpress.Web" Assembly="DevExpress.Web.v21.2" %>
+
+
+
+
+
+<asp:Content ID="Content1" ContentPlaceHolderID="Data" runat="Server">
+    <script language="javascript" type="text/javascript" >
+function OnContextMenuItemClick(sender, e) {
+            if (e.item.name == "CustomExportToXLS") {
+                e.processOnServer = true;
+                e.usePostBack = true;
+            }
+        }
+function ShowReport(Report, SubIns, Branch, TDate) {
+            var viewportwidth;
+            var viewportheight;
+            if (typeof window.innerWidth != 'undefined') {
+                viewportwidth = window.innerWidth;
+                viewportheight = window.innerHeight
+            }
+            else if (typeof document.documentElement != 'undefined'
+                    && typeof document.documentElement.clientWidth != 'undefined' && document.documentElement.clientWidth != 0) {
+                viewportwidth = document.documentElement.clientWidth;
+                viewportheight = document.documentElement.clientHeight
+            }
+            popup.SetSize(viewportwidth, viewportheight);
+            popup.SetContentHtml(null);
+            popup.SetContentUrl('../OutPutManagement/PreView.aspx?Report=' + Report + '&Sys=' + SubIns + '&Today=' + TDate);
+            popup.Show();
+        }
+function SelectAndClosePopup() {
+    popup.Hide();
+    MainGrid.Refresh();
+    detailGrid.Refresh();
+}
+function SetSystem(sys, br) {
+    SysTxt.SetValue(sys);
+    Branch.SetValue(br);
+    MainGrid.PerformCallback(sys);
+}
+function ShowPopup(Parameter) {
+    //alert(customerID);Height="800" Width="800"
+    if (Parameter == 'New') {
+        popup.SetSize(1300, 950);
+        popup.HeaderText = 'New Claim Form'
+        popup.SetContentHtml(null);
+        popup.SetContentUrl('../ClaimsManage/ClmOpen/OpenClmFile.aspx?Sys=' + SysTxt.GetValue());
+        popup.Show();
+    }
+    else {
+        alert(Parameter);
+        ////popup.SetContentUrl('Reseat.aspx?PolNo=' + customerID);
+        //popup.SetSize(1300, 950);
+        HeaderText = "Print"
+        //popup.SetContentUrl('../OutPutManagement/PreView.aspx?Report=/TakafulyReports/Soa');
+        //popup.Show();
+        window.open(unescape(location.pathname).substring(0, unescape(location.pathname).lastIndexOf("/Reinsurance")) + '/OutPutManagement/PreView.aspx?Report=/TakafulyReports/Soa');
+    }
+
+    
+}
+function GetPickUpPoints(values) {
+    PickUpPoints = values;
+    debugger;
+    if (rowVisibleIndex == 'توزيع') {
+        popup.SetSize(1700, 800);
+        popup.HeaderText = 'Distibute Claim'
+        popup.SetContentHtml(null);
+        popup.SetContentUrl('../ReInsurance/DestributeClaim.aspx?OrderNo=' + values);
+        popup.Show()
+        //PolicyIssu('../ReInsurance/DestributeClaim.aspx?OrderNo=' + values);
+        rowVisibleIndex = '';
+    }
+    if (rowVisibleIndex == 'معاينة') {
+        popup.SetSize(1300, 950);
+        popup.HeaderText = 'New Claim Form'
+        popup.SetContentHtml(null);
+        popup.SetContentUrl('../ClaimsManage/ClmOpen/OpenClmFile.aspx?ClmNo=' + values);
+        popup.Show();
+    }
+    if (rowVisibleIndex == 'إقفال') {
+        var Path;
+        var system = SysTxt.GetValue();
+        //Path = '../ClaimsManage/close/CloseClmFile.aspx?ClmNo' + values;
+        popup.SetSize(500, 500);
+        popup.HeaderText = 'Close Claim File'
+        popup.SetContentHtml(null);
+        popup.SetContentUrl('../ClaimsManage/close/CloseClmFile.aspx?ClmNo' + values);
+        popup.Show();
+        //if (system == 'OR') { Path = '../PolicyManagement/MCMOTOR/Orange.aspx'; }
+        //if (system == 'AT') { Path = '../PolicyManagement/MCMOTOR/LibyaAssist.aspx?sys=AT'; }
+        //if (system == '02') { Path = '../PolicyManagement/MOMOTOR/Issu.aspx'; }
+        //if (system == '03') { Path = '../PolicyManagement/MOMOTOR/Issu.aspx'; }
+        //if (system == '04') { Path = '../PolicyManagement/CARGO/CARGO.aspx'; }
+        //if (system == '05') { Path = '../PolicyManagement/CARGO/CARGO.aspx'; }
+        //if (system == '06') { Path = '../PolicyManagement/CARGO/HullIssu.aspx'; }
+        //if (system == '08') { Path = '../PolicyManagement/GeneralAccedent/BetSecret.aspx'; }
+        //if (system == '10') { Path = '../PolicyManagement/GeneralAccedent/CashInSafe.aspx'; }
+        //if (system == '11') { Path = '../PolicyManagement/GeneralAccedent/SevResponsibility.aspx'; }
+        //if (system == '12') { Path = '../PolicyManagement/GeneralAccedent/Banking.aspx'; }
+        //if (system == '14') { Path = '../PolicyManagement/GeneralAccedent/EngAcc.aspx'; }
+        //if (system == '13') { Path = '../PolicyManagement/GeneralAccedent/CashInTransit.aspx'; }
+        //if (system == '15') { Path = '../PolicyManagement/GeneralAccedent/EngAcc.aspx'; }
+        //if (system == '16') { Path = '../PolicyManagement/GeneralAccedent/Machines.aspx'; }
+        //if (system == '18') { Path = '../PolicyManagement/GeneralAccedent/JobResponsbility.aspx'; }
+        //if (system == '19') { Path = '../PolicyManagement/GeneralAccedent/AllRisk.aspx'; }
+        //if (system == '21') { Path = '../PolicyManagement/Burglary/Issu.aspx'; }
+        //if (system == '22') { Path = '../PolicyManagement/Fire/Issu.aspx'; }
+        //if (system == '23') { Path = '../PolicyManagement/Family/Issu.aspx'; }
+        //if (system == '26') { Path = '../PolicyManagement/CARGO/Aviation.aspx'; }
+        //if (system == '27') { Path = '../PolicyManagement/Life/TravelServ.aspx'; }
+        //if (system == 'MD') { Path = '../PolicyManagement/Life/Medical_Responspility.aspx'; }
+         //CloseFile(Path + values);
+        rowVisibleIndex = '';
+    }
+    if (rowVisibleIndex == 'تقدير احتياطي') {
+        popup.SetSize(1700, 800);
+        popup.HeaderText = 'Distibute Claim'
+        popup.SetContentHtml(null);
+        popup.SetContentUrl('../ClaimsManage/Estimation/Estimate.aspx?ClmNo=' + values);
+        popup.Show()
+        //PolicyIssu('../ReInsurance/DestributeClaim.aspx?OrderNo=' + values);
+        rowVisibleIndex = '';
+    }
+    //if (rowVisibleIndex == 'إصدار وثيقة') {
+    //    Msgpopup.SetSize(500, 150);
+    //    Msgpopup.SetContentUrl('Msg.aspx?Order=' + values);
+    //    Msgpopup.Show();
+    //}
+    //if (rowVisibleIndex == 'الغاء الطلب') {
+    //    Msgpopup.SetSize(500, 150);
+    //    Msgpopup.SetContentUrl('Msg.aspx?Order=' + values);
+    //    Msgpopup.Show();
+    //}
+}
+function CloseFile(Path) {
+    var viewportwidth;
+    var viewportheight;
+    if (typeof window.innerWidth != 'undefined') {
+        viewportwidth = window.innerWidth;
+        viewportheight = window.innerHeight
+    }
+    else if (typeof document.documentElement != 'undefined'
+            && typeof document.documentElement.clientWidth != 'undefined' && document.documentElement.clientWidth != 0) {
+        viewportwidth = document.documentElement.clientWidth;
+        viewportheight = document.documentElement.clientHeight
+    }
+    popup.SetSize(500, 500);
+    popup.HeaderText = 'Close Claim File'
+    popup.SetContentHtml(null);
+    popup.SetContentUrl(Path);
+    popup.Show();
+}
+ </script>
+    <div>
+         <asp:Table runat="server">
+            <asp:TableRow>
+                <asp:TableCell>
+                   <dx:ASPxHyperLink ID="ASPxHyperLink1" ToolTip="فتح ملف حادث"  NavigateUrl="javascript:ShowPopup('New')" ImageUrl="~/images/add.png" runat="server"  Text="ASPxHyperLink">
+                        </dx:ASPxHyperLink>
+                </asp:TableCell>
+                <asp:TableCell>
+                    <dx:ASPxMenu ID="ASPxMenu2" runat="server"
+                        CssFilePath="~/App_Themes/BlackGlass/{0}/styles.css" CssPostfix="BlackGlass"
+                        Font-Names="Tahoma" RightToLeft="True" ShowPopOutImages="True"
+                        SpriteCssFilePath="~/App_Themes/BlackGlass/{0}/sprite.css" AutoSeparators="RootOnly">
+                        <ClientSideEvents ItemClick="function(s, e) {                                            
+                                                if (e.item.GetText()=='نعويضات تحت التسوية'){
+                                                    var d = new Date();
+                                                    var n = d.getDate();
+                                                    var mm=d.getMonth()+1;
+                                                    var yy=d.getFullYear();
+                                                    ShowReport('/TakafulyReports/Outstanding',SysTxt.GetValue(),Branch.GetValue(),yy + '/' + mm + '/' + n);
+                                                }
+                                                if (e.item.GetText()=='تعوضات مسددة'){
+                                                    var d = new Date();
+                                                    var n = d.getDate();
+                                                    var mm=d.getMonth()+1;
+                                                    var yy=d.getFullYear();
+                                                    ShowReport('/TakafulyReports/MoPaidClaims',SysTxt.GetValue(),Branch.GetValue(),yy + '/' + mm + '/' + n);
+                                                }
+                                                if (e.item.GetText()=='الإحصائية المجمعة'){
+                                                   var d = new Date();
+                                                   var n = d.getDate();
+                                                   var mm=d.getMonth()+1;
+                                                   var yy=d.getFullYear();
+                                                    ShowReport('/TakafulyReports/IssuStatistcs',SysTxt.GetValue(),Branch.GetValue(),yy + '/' + mm + '/' + n);
+                                                }
+                                                if (e.item.GetText()=='الإحصائية المفصلة'){
+                                                   var d = new Date();
+                                                   var n = d.getDate();
+                                                   var mm=d.getMonth()+1;
+                                                   var yy=d.getFullYear();
+                                                    ShowReport('/TakafulyReports/Details',SysTxt.GetValue(),Branch.GetValue(),yy + '/' + mm + '/' + n);
+                                                }
+                                            }" />
+                        <Items>
+                            <dx:MenuItem Text="التقارير" Image-Url="~/Images/Rep.png">
+                                <Items>
+                                    <dx:MenuItem Text="نعويضات تحت التسوية">
+                                    </dx:MenuItem>
+                                    <dx:MenuItem Text="تعوضات مسددة">
+                                    </dx:MenuItem>
+                                    <dx:MenuItem Text="الإحصائية المجمعة">
+                                    </dx:MenuItem>
+                                    <dx:MenuItem Text="الإحصائية المفصلة">
+                                    </dx:MenuItem>
+                                </Items>
+
+                                <Image Url="~/Images/Rep.png"></Image>
+                            </dx:MenuItem>
+                        </Items>
+                        <LoadingPanelImage Url="~/App_Themes/BlackGlass/Web/Loading.gif">
+                        </LoadingPanelImage>
+                        <RootItemSubMenuOffset FirstItemX="-1" LastItemX="-1" X="-1"></RootItemSubMenuOffset>
+
+
+                        <ItemStyle DropDownButtonSpacing="11px" ToolbarDropDownButtonSpacing="8px" ToolbarPopOutImageSpacing="8px" />
+                        <SubMenuStyle GutterWidth="0px" />
+                    </dx:ASPxMenu>
+                </asp:TableCell>
+                <asp:TableCell>
+
+                </asp:TableCell>
+                <asp:TableCell>
+                    <dx:ASPxCheckBox ID="chkSingleExpanded" runat="server" Text="Expand/ Collaps"
+                        AutoPostBack="true" OnCheckedChanged="chkSingleExpanded_CheckedChanged" CheckState="checked" CssFilePath="~/App_Themes/DevEx/{0}/styles.css" CssPostfix="DevEx" SpriteCssFilePath="~/App_Themes/DevEx/{0}/sprite.css" />
+                </asp:TableCell>
+            </asp:TableRow>
+        </asp:Table>
+        
+        <asp:SqlDataSource runat="server" ID="YearsSource" ConnectionString='<%$ ConnectionStrings:MainDBConnectionString1 %>' 
+            SelectCommand="SELECT DISTINCT(Year(MainClaimFile.ClmDate)) FROM MainClaimFile order by year(MainClaimFile.ClmDate) desc"></asp:SqlDataSource>
+                                        <dx:ASPxTextBox ID="Branch" ClientInstanceName="Branch" Text="0" runat="server" 
+                                            Height="1px" Visible="true" 
+                                            Width="1px" Enabled="true">
+                                            <Border BorderColor="White" BorderStyle="None" />
+                                        </dx:ASPxTextBox>
+                                        <dx:ASPxTextBox ID="Sys"  ClientInstanceName="SysTxt" Text="0" runat="server" 
+                                            Height="1px" Visible="true" 
+                                            Width="1px" Enabled="true">
+                                            <Border BorderColor="White" BorderStyle="None" />
+                                        </dx:ASPxTextBox>
+        <asp:SqlDataSource ID="SqlDataSource" runat="server"
+            ConnectionString='<%$ ConnectionStrings:MainDBConnectionString1 %>'
+            SelectCommand="select distinct MainClaimFile.ClmNo, mainclaimfile.PolNo, mainclaimfile.Status,CustomerFile.CustName,
+RTRIM(MainClaimFile.ClmNo) + '&EndNo=' + LTRIM(MainClaimFile.EndNo) + '&LoadNo=' + LTRIM(MainClaimFile.LoadNo) 
+                         + '&OrderNo=' + rtrim(PolicyFile.OrderNo) + '&Sys=' + PolicyFile.SubIns + '&Branch=' + PolicyFile.Branch AS Clm,
+RTRIM(MainClaimFile.ClmNo) + '&EndNo=' + LTRIM(MainClaimFile.EndNo) 
+                         + '&LoadNo=' + LTRIM(MainClaimFile.LoadNo) + '&OrderNo=' + rtrim(PolicyFile.OrderNo) + '&Sys=' + PolicyFile.SubIns + '&Branch=' + PolicyFile.Branch + '&PolNo=' + PolicyFile.PolNo  AS ClmPath
+ from MainClaimFile left outer join Estimation on MainClaimFile.ClmNo=Estimation.clmno and MainClaimFile.PolNo=Estimation.polno
+ left outer join esal on MainClaimFile.clmno=esal.clmno and MainClaimFile.Branch=esal.branch left outer join NetPrm on 
+ NetPrm.PolNo = rtrim(MainClaimFile.PolNo) + '-' + rtrim(MainClaimFile.ClmNo) and round(Estimation.value,3)=round(netprm.Net,3) left outer join policyfile
+ on MainClaimFile.PolNo=PolicyFile.PolNo and MainClaimFile.EndNo=PolicyFile.EndNo 
+ left outer join CustomerFile on CustomerFile.CustNo=policyfile.CustNo left outer join BranchInfo on mainclaimfile.Branch=BranchInfo.BranchNo
+            WHERE MainClaimFile.SubIns=@Sys and mainclaimfile.Branch=@Branch">
+            <SelectParameters>
+                <asp:ControlParameter ControlID="Sys" Name="Sys" PropertyName="Text" Type="String" />
+                <asp:ControlParameter ControlID="Branch" Name="Branch" PropertyName="Text" />
+            </SelectParameters>
+        </asp:SqlDataSource>
+        <dx:ASPxGridView ID="MainGrid" ClientInstanceName="MainGrid" runat="server" DataSourceID="SqlDataSource"
+            OnHtmlDataCellPrepared="MainGrid_HtmlRowPrepared"
+            KeyFieldName="ClmNo" Styles-AlternatingRow-HorizontalAlign="Right"
+            Width="100%" AutoGenerateColumns="False"
+            CssFilePath="~/App_Themes/BlackGlass/{0}/styles.css" CssPostfix="BlackGlass">
+            
+           <ClientSideEvents RowClick="function(s, e) {
+                                                   // debugger;
+                                                    if (rowVisibleIndex=='معاينة'){
+                                                        s.GetRowValues(e.visibleIndex, 'ClmPath', GetPickUpPoints);
+                                                    }
+                                                    if (rowVisibleIndex=='توزيع'){
+                                                        s.GetRowValues(e.visibleIndex, 'Clm', GetPickUpPoints);
+                                                    }
+                                                    if (rowVisibleIndex=='إقفال'){
+                                                        s.GetRowValues(e.visibleIndex, 'ClmPath', GetPickUpPoints);
+                                                    }
+                                                 }" 
+                                />
+            <Columns>
+                <dx:GridViewCommandColumn VisibleIndex="0" Visible="False">
+                    
+                </dx:GridViewCommandColumn>
+                <dx:GridViewDataColumn FieldName="ClmNo" VisibleIndex="1" Caption="رقم الحادث" />
+                <dx:GridViewDataColumn FieldName="PolNo" VisibleIndex="2" Caption="رقم الوثيقة" />
+                <dx:GridViewDataColumn FieldName="CustName" VisibleIndex="3" Caption="اسم حامل الوثيقة/ المؤمن له" />
+                <dx:GridViewDataColumn FieldName="Status" VisibleIndex="4" Caption="حالة الملف" />
+
+                <dx:GridViewDataColumn FieldName="" ToolTip="menu" VisibleIndex="5" CellStyle-HorizontalAlign="Left">
+                    <DataItemTemplate>
+                        <dx:ASPxMenu ID="MClmMenu" ClientInstanceName="MASPxMenu" runat="server" ShowPopOutImages="true" AutoSeparators="RootOnly"
+                            CssFilePath="~/App_Themes/BlackGlass/{0}/styles.css" CssPostfix="BlackGlass" SpriteCssFilePath="~/App_Themes/BlackGlass/{0}/sprite.css">
+                            <ClientSideEvents ItemMouseOver="function(s, e) {
+                                //debugger; 
+                                                                rowVisibleIndex=e.item.GetText();
+                                                }" />
+                            <Items>
+                                <dx:MenuItem Text="إجراءات">
+                                </dx:MenuItem>
+                            </Items>
+                            <LoadingPanelImage Url="~/App_Themes/BlackGlass/Web/Loading.gif"></LoadingPanelImage>
+
+                            <RootItemSubMenuOffset FirstItemX="-1" LastItemX="-1" X="-1"></RootItemSubMenuOffset>
+
+                            <ItemStyle DropDownButtonSpacing="11px" ToolbarDropDownButtonSpacing="8px" ToolbarPopOutImageSpacing="8px"></ItemStyle>
+
+                            <SubMenuStyle GutterWidth="0px"></SubMenuStyle>
+                        </dx:ASPxMenu>
+                    </DataItemTemplate>
+                </dx:GridViewDataColumn>
+            </Columns>
+            
+            <SettingsPager PageSize="18">
+           
+        </SettingsPager>
+
+            <Settings ShowFilterRow="True" ShowGroupPanel="True"></Settings>
+
+            <SettingsDetail ShowDetailRow="true" />
+
+            <Images SpriteCssFilePath="~/App_Themes/BlackGlass/{0}/sprite.css">
+                <LoadingPanelOnStatusBar Url="~/App_Themes/BlackGlass/GridView/gvLoadingOnStatusBar.gif"></LoadingPanelOnStatusBar>
+
+                <LoadingPanel Url="~/App_Themes/BlackGlass/GridView/Loading.gif"></LoadingPanel>
+            </Images>
+            <ImagesFilterControl>
+                <LoadingPanel Url="~/App_Themes/BlackGlass/Editors/Loading.gif"></LoadingPanel>
+            </ImagesFilterControl>
+            <Styles  CssPostfix="BlackGlass" CssFilePath="~/App_Themes/BlackGlass/{0}/styles.css">
+                <Header HorizontalAlign="right" SortingImageSpacing="5px" ImageSpacing="5px"></Header>
+            </Styles>
+            <StylesEditors>
+                <CalendarHeader Spacing="1px">
+                </CalendarHeader>
+                <ProgressBar Height="25px"></ProgressBar>
+            </StylesEditors>
+            <Templates>
+                <DetailRow>
+                    الأطراف المتضررة/ 
+               <%-- <dx:ASPxLabel runat="server" Text='<%# Session("Q") %>' Font-Bold="true" />--%>
+                      
+                <%--<dx:ASPxLabel runat="server" Text='<%# Eval("Reinsurer") %>' Font-Bold="true" />--%>
+                    <br />
+                    <br />
+                    <dx:ASPxGridView ID="detailGrid" ClientInstanceName="detailGrid" runat="server" DataSourceID="SqlDetails" KeyFieldName="TPID"
+                        OnHtmlDataCellPrepared="grid_HtmlRowPrepared"
+                        Width="100%" OnBeforePerformDataSelect="detailGrid_DataSelect" AutoGenerateColumns="False"
+                        CssFilePath="~/App_Themes/BlackGlass/{0}/styles.css" CssPostfix="BlackGlass">
+                        <ClientSideEvents RowClick="function(s, e) {
+                                                    //debugger; 
+                                                    if (rowVisibleIndex=='تقدير احتياطي'){
+                                                        s.GetRowValues(e.visibleIndex, 'clmNo', GetPickUpPoints);
+                                                    }
+                                                    if (rowVisibleIndex=='تسوية'){
+                                                        s.GetRowValues(e.visibleIndex, 'Clm', GetPickUpPoints);
+                                                    }
+                                                    if (rowVisibleIndex=='سداد'){
+                                                        s.GetRowValues(e.visibleIndex, 'ClmPath', GetPickUpPoints);
+                                                    }
+                                                }" />
+                        <Columns>
+                 <dx:GridViewCommandColumn VisibleIndex="0" Visible="False">
+                    <ClearFilterButton Visible="True"></ClearFilterButton>
+                </dx:GridViewCommandColumn>
+                            <dx:GridViewDataColumn FieldName="ThirdParty" VisibleIndex="1" Caption="المتضرر" />
+                            <dx:GridViewDataColumn FieldName="Asset" VisibleIndex="2" Caption="البيان المتضرر" />
+                            <dx:GridViewDataColumn FieldName="Damage" VisibleIndex="3" Caption="بيان الأضرار" />
+                            <dx:GridViewDataColumn FieldName="Value" VisibleIndex="4" Caption="قيمة الأضرار" />
+                            <dx:GridViewDataColumn FieldName="TPID" VisibleIndex="5" Visible="false" />
+                            <dx:GridViewDataColumn FieldName="ClmNo" VisibleIndex="6" Visible="false" />
+                            <%--                            <dx:GridViewDataHyperLinkColumn CellStyle-HorizontalAlign="Center" FieldName="Q" Width="40" EditFormSettings-Visible="True" Caption="" ReadOnly="True" VisibleIndex="3">
+                                <PropertiesHyperLinkEdit ImageUrl="~/images/printer.png"  NavigateUrlFormatString="javascript:ShowPopup(2);" Text="Print Statement Of Account">
+                                </PropertiesHyperLinkEdit>
+                            </dx:GridViewDataHyperLinkColumn>--%>
+                            <dx:GridViewDataColumn FieldName="" ToolTip="menu" VisibleIndex="5" CellStyle-HorizontalAlign="Left">
+                                <DataItemTemplate>
+                                    <dx:ASPxMenu ID="ClmMenu" ClientInstanceName="ASPxMenu" runat="server" ShowPopOutImages="true" AutoSeparators="RootOnly" CssFilePath="~/App_Themes/BlackGlass/{0}/styles.css" CssPostfix="BlackGlass" SpriteCssFilePath="~/App_Themes/BlackGlass/{0}/sprite.css">
+                                        <ClientSideEvents ItemMouseOver="function(s, e) {
+                                                                //debugger; 
+                                                                rowVisibleIndex=e.item.GetText();
+                                                }" />
+                                        <Items>
+                                            <dx:MenuItem Text="إجراءات">
+                                            </dx:MenuItem>
+                                        </Items>
+                                        <LoadingPanelImage Url="~/App_Themes/BlackGlass/Web/Loading.gif"></LoadingPanelImage>
+
+                                        <RootItemSubMenuOffset FirstItemX="-1" LastItemX="-1" X="-1"></RootItemSubMenuOffset>
+
+                                        <ItemStyle DropDownButtonSpacing="11px" ToolbarDropDownButtonSpacing="8px" ToolbarPopOutImageSpacing="8px"></ItemStyle>
+
+                                        <SubMenuStyle GutterWidth="0px"></SubMenuStyle>
+                                    </dx:ASPxMenu>
+                                </DataItemTemplate>
+                            </dx:GridViewDataColumn>
+                        </Columns>
+                        <Settings ShowFooter="True" />
+
+                        <TotalSummary>
+
+                            <dx:ASPxSummaryItem FieldName="value" SummaryType="Sum" />
+
+                        </TotalSummary>
+
+                        <Images SpriteCssFilePath="~/App_Themes/BlackGlass/{0}/sprite.css">
+                            <LoadingPanelOnStatusBar Url="~/App_Themes/BlackGlass/GridView/gvLoadingOnStatusBar.gif"></LoadingPanelOnStatusBar>
+
+                            <LoadingPanel Url="~/App_Themes/BlackGlass/GridView/Loading.gif"></LoadingPanel>
+                        </Images>
+
+                        <ImagesFilterControl>
+                            <LoadingPanel Url="~/App_Themes/BlackGlass/Editors/Loading.gif"></LoadingPanel>
+                        </ImagesFilterControl>
+
+                        <Styles CssPostfix="BlackGlass" CssFilePath="~/App_Themes/BlackGlass/{0}/styles.css">
+                            <Header  HorizontalAlign="right" SortingImageSpacing="5px" ImageSpacing="5px"></Header>
+                        </Styles>
+
+                        <StylesEditors>
+
+                            <CalendarHeader Spacing="1px"></CalendarHeader>
+
+                            <ProgressBar Height="25px"></ProgressBar>
+                        </StylesEditors>
+                        <Templates>
+                            <DetailRow>
+                               
+                            </DetailRow>
+                        </Templates>
+                    </dx:ASPxGridView>
+                    <asp:SqlDataSource runat="server" ID="SqlDetails" ConnectionString='<%$ ConnectionStrings:MainDBConnectionString1 %>'
+                        SelectCommand="	SELECT TPID, ThirdParty.clmNo,ThirdParty.ThirdParty, Asset, Damage, Value, ThirdParty.UserName
+   FROM  ThirdParty INNER JOIN MainClaimfile ON MainClaimfile.ClmNo = ThirdParty.ClmNo
+                                                where ThirdParty.ClmNo=@ClmNo
+                                            GROUP BY TPID, ThirdParty.ClmNo, ThirdParty, Asset, Damage, Value,ThirdParty.UserName">
+                        <SelectParameters>
+                           <%-- <asp:ControlParameter ControlID="Years" PropertyName="Value" Name="Year" Type="Int32"></asp:ControlParameter>
+                            <asp:ControlParameter ControlID="Quarters" PropertyName="Value" Name="Q" Type="Int32"></asp:ControlParameter>--%>
+                            <asp:SessionParameter Name="ClmNo" SessionField="ClmNo" Type="String" />
+                        </SelectParameters>
+                    </asp:SqlDataSource>
+                </DetailRow>
+            </Templates>
+
+        </dx:ASPxGridView>
+        <dx:ASPxPopupControl ID="ASPxPopupControl1" runat="server" AllowDragging="True" AllowResize="True"
+            CloseAction="CloseButton"
+            EnableViewState="False" PopupElementID="Image1" PopupHorizontalAlign="WindowCenter"
+            PopupVerticalAlign="WindowCenter" ShowFooter="True" Width="700px" Modal="True"
+            Height="600px" FooterText=""
+            ClientInstanceName="popup" EnableHierarchyRecreation="True"
+            CssFilePath="~/App_Themes/BlackGlass/{0}/styles.css" CssPostfix="BlackGlass" SpriteCssFilePath="~/App_Themes/BlackGlass/{0}/sprite.css" RenderMode="Lightweight" ResizingMode="Postponed" ScrollBars="Both">
+            <LoadingPanelImage Url="~/App_Themes/BlackGlass/Web/Loading.gif" tooltip="loading...">
+            </LoadingPanelImage>
+            <ClientSideEvents CloseUp="function(s, e) {MainGrid.PerformCallback();}"
+                CloseButtonClick="function(s, e) {MainGrid.PerformCallback();}"
+                 />
+            <ContentStyle HorizontalAlign="Left" VerticalAlign="Top"></ContentStyle>
+
+            <HeaderStyle>
+                <Paddings PaddingBottom="6px" PaddingTop="3px" PaddingLeft="15px" PaddingRight="6px" />
+            </HeaderStyle>
+            <ContentCollection>
+                <dx:PopupControlContentControl ID="PopupControlContentControl1" runat="server" SupportsDisabledAttribute="True">
+                </dx:PopupControlContentControl>
+            </ContentCollection>
+        </dx:ASPxPopupControl>
+   </div>
+</asp:Content>
+<asp:Content  ID="Content2" ContentPlaceHolderID="NAV" Runat="Server" >
+    <dx:ASPxNavBar Width="194px" Height="100%" ID="ASPxNavBar1" Font-Names="tahoma"  ItemStyle-Font-Size="8"
+        runat="server" AllowSelectItem="True" RightToLeft="True" ItemStyle-Height="3" ItemStyle-Paddings-Padding="0"
+            EnableAnimation="True" CssFilePath="~/App_Themes/DevEx/{0}/styles.css" 
+        CssPostfix="DevEx" SpriteCssFilePath="~/App_Themes/DevEx/{0}/sprite.css">
+            <Groups>
+
+            </Groups>
+                <LoadingPanelImage Url="~/App_Themes/DevEx/Web/Loading.gif">
+                </LoadingPanelImage>
+            <LinkStyle>
+                <Font Underline="False"></Font>
+            </LinkStyle>
+                <LoadingPanelStyle ImageSpacing="5px">
+                </LoadingPanelStyle>
+        </dx:ASPxNavBar>    
+    <asp:SiteMapDataSource  ID="SiteMapDataSource1"   ShowStartingNode="false" StartingNodeUrl="~/PolicyManagement/Default.aspx" Runat="server" />
+</asp:Content>
+

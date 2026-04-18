@@ -1,0 +1,59 @@
+﻿body {}
+h4
+{
+    color: #3E92BD;
+}
+.PagerCSS
+{
+    display: none;
+}
+
+.BoundControl
+{
+    display: none;
+}
+
+.GridHeader
+{
+    background-image: url(Images/Header.gif);
+    text-align: left;
+    height: 22px;
+    font-size: 12px;
+}
+
+.RowBkg
+{
+    background-image: url(Images/cell.gif);
+    color: #3E92BD;
+    text-align: left;
+    padding-left: 3px;
+    font-size: 12px;
+    height: 15px;
+}
+
+.FooterBkg
+{
+    background-image: url(Images/footer.gif);
+    height: 29px;
+    color: white;
+    padding-left: 10px
+}
+
+.Rail
+{
+    background-image: url(Images/Slider_bg.gif);
+    height: 15px;
+    width:150px
+}
+
+.Slider
+{
+    width: 250px;
+}
+
+.PageInfo
+{
+    position: absolute;
+    left: 260px;
+    top: 0px
+}

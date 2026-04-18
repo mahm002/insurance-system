@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<siteMap>
+  <siteMapNode  url="~/PolicyManagement/default.aspx" title="ASP.NET">
+    <siteMapNode Expanded="false"  url="" title="تأمين سيارات اجباري">
+		<siteMapNode url="~/PolicyManagement/default.aspx?sys=01" title="اكتتاب" />
+		<siteMapNode url="~/PolicyManagement/default.aspx?sys=OR" title="توسيع الرقعة" />
+    </siteMapNode>
+    <siteMapNode url="" title="تأمين بحري">
+      <siteMapNode url="~/PolicyManagement/default.aspx?sys=04" title="بحري بضائع" />
+      <siteMapNode url="~/PolicyManagement/default.aspx?sys=05" title="بحري بضائع مفتوحة" />
+      <siteMapNode url="~/PolicyManagement/default.aspx?sys=06" title="أجسام سفن" />
+      <siteMapNode url="~/PolicyManagement/default.aspx?sys=26" title="أجسام طائرات" />
+    </siteMapNode>
+    <siteMapNode url="" title="تأمين سيارات تكميلي">
+      <siteMapNode url="~/PolicyManagement/default.aspx?sys=02" title="اصدار خصوصي" />
+      <siteMapNode url="~/PolicyManagement/default.aspx?sys=03" title="اصدار تجاري" />
+    </siteMapNode>
+	  <siteMapNode url="" title="تأمين الهندسي">
+		  <siteMapNode url="~/PolicyManagement/default.aspx?sys=14" title="اصدار أخطار المقاولين" />
+		  <siteMapNode url="~/PolicyManagement/default.aspx?sys=15" title="اصدار أخطار التركيب" />
+	  </siteMapNode>
+	  <siteMapNode url="" title="تأمين حوادث متنوعة">
+		  <siteMapNode url="~/PolicyManagement/default.aspx?sys=16" title="نقل نقدية" />
+		  <siteMapNode url="~/PolicyManagement/default.aspx?sys=17" title="مسئولية رب العمل" />
+	  </siteMapNode>
+	  <siteMapNode url="" title="تأمين حريق">
+		  <siteMapNode url="~/PolicyManagement/default.aspx?sys=18" title="حريق" />
+		  <siteMapNode url="~/PolicyManagement/default.aspx?sys=19" title="سطو" />
+		  <siteMapNode url="~/PolicyManagement/default.aspx?sys=20" title="حماية عائلة" />
+	  </siteMapNode>
+	  <!--		<siteMapNode url="" title="Topic Index" /> -->
+	</siteMapNode>
+</siteMap>

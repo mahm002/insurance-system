@@ -1,0 +1,241 @@
+#ctl00_Image1, #ctl00_Image2, #ctl00_BannerFade {
+    display: block
+}
+
+body {
+    font: .7em Verdana,Tahoma,Arial,Helvetica, sans-serif;
+}
+
+a {
+    color: #3366CC;
+}
+
+.blue {
+    color: #3366CC;
+}
+
+a.headerlink {
+    color: black;
+    text-decoration: none
+}
+
+a:hover {
+    color: #1D489E;
+    text-decoration: none;
+}
+
+ul {
+    list-style: url(../images/bullet.gif) outside;
+}
+
+table.bulletlist li {
+    list-style: url(../images/bullet.gif)
+}
+
+td.toolbar {
+    color: gray;
+    background: black;
+    font: 11px Tahoma, Verdana, Helvetica-Narrow, Helvetica, sans-serif;
+}
+
+.bar {
+    font: tahoma normal 8px;
+    border-bottom: solid 1px #8a9db5;
+    width: 100%;
+    color: gray;
+    background: #b9c4d2;
+}
+
+a.toolbar {
+    color: gray;
+    font: 11px Tahoma, Verdana, Helvetica-Narrow, Helvetica, sans-serif;
+    text-decoration: none;
+}
+
+td.mainbody {
+    padding-top: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+table.table {
+    font-size: 1em;
+}
+
+/* no longer needed */
+span.subhead {
+}
+
+span.header {
+}
+
+table.table pre {
+}
+
+div.code pre {
+}
+
+td.code {
+}
+
+td.caption {
+}
+
+span.caption {
+    font-style: italic;
+    margin-top: 5;
+}
+
+table.table th {
+    padding-left: 5px;
+    background: #DADADA;
+    text-align: left;
+}
+
+/* not sure what this is used for */
+table.table {
+    width: 100%;
+}
+
+    table.table td {
+        padding: 5px 5px 10px;
+        vertical-align: top;
+        background: #F1F1F1;
+    }
+
+.code {
+    overflow: auto;
+    width: 98%;
+    padding: 1px; /* was 3px */
+    color: #669933;
+    font-size: 1.2em;
+    background-color: #F0F0F0;
+    font-family: courier-new; /* added */
+}
+
+pre.code {
+    overflow: auto;
+    width: 98%;
+    padding: 10px; /* was 3px */
+    color: #669933;
+    font-size: 1.1em;
+    background-color: #F0F0F0;
+    font-family: courier-new; /* added */
+    border: 1px solid #DADADA;
+}
+
+code {
+    color: #669933;
+    font-size: 1.2em;
+    font-family: courier new;
+}
+
+.code pre {
+    font-size: 1em;
+}
+
+div.indent {
+    padding-left: 25px;
+}
+
+/*
+new design styles from Kevin below
+*/
+h1 {
+    display: inline;
+    font-size: 14px;
+    direction: ltr;
+}
+
+h2 {
+    font-size: 1.6em;
+}
+
+h3 {
+    font-size: 1.1em;
+}
+
+    h3.inline {
+        font-size: 1em;
+        display: inline;
+    }
+
+div.inline {
+    padding-bottom: 3px;
+}
+
+    div.inline h3 {
+        display: inline;
+    }
+
+h4 {
+    font-size: 1em;
+}
+
+h5 {
+    font-size: 1em;
+}
+
+td.homephoto, td.nav {
+    color: #3366CC;
+    border-right: 1px solid #D7D7D7;
+    border-left: 1px solid gray;
+    background-image: url(../images/FrameBack.JPG);
+    background-repeat: repeat-x;
+    width: 231px;
+    padding: 10px;
+    font-family: Tahoma, Verdana, Helvetica-Narrow, Helvetica, sans-serif;
+}
+
+td.homephoto {
+    padding: 0px;
+}
+
+td.bannerbg {
+    background: #2E5CB8;
+}
+
+.sectiontitle {
+    color: #FFFFFF;
+    padding: 5px;
+    border-bottom: 3px solid #FFFFFF;
+    font-family: Tahoma, Verdana, Helvetica-Narrow, Helvetica, sans-serif;
+    background: #3366CC;
+}
+
+.gridhead {
+    background-image: url(../images/obs_bkg.png);
+    background-repeat: repeat-x;
+    font-family: Tahoma;
+    font-size: 10;
+    font-style: normal;
+    color: Silver;
+}
+
+.new {
+    color: #663333;
+    border: 1px solid #ECA67D;
+    padding: 10px;
+    width: 97%;
+    background: #FFFCD6;
+}
+
+.newinline {
+    font-weight: bold;
+    font-size: 9px;
+    color: #FF3300;
+    border: 1px solid #ECA67D;
+    padding: 0px 2px;
+    background: #F6F4C3;
+}
+
+.runview {
+    margin-left: 30px;
+    border-left: 1px solid #C1C1C1;
+    padding: 3px 0px 0px 15px;
+    font-weight: bold;
+}
+
+.footer {
+    color: #B2B2B2;
+}

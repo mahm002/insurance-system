@@ -1,0 +1,605 @@
+﻿<%@ Master Language="VB" AutoEventWireup="true" CodeBehind="Root.master.vb" Inherits="RootMaster" %>
+
+<%@ Register Assembly="DevExpress.Web.Bootstrap.v21.2, Version=21.2.15.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.Web.Bootstrap" TagPrefix="dx" %>
+
+<!DOCTYPE html>
+<html lang="ar" xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>شركة المسار للتأمين</title>
+
+    <!-- Bootstrap 5 CSS -->
+
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="Content/Site.css" />
+    <link rel="stylesheet" type="text/css" href="Content/Content.css" />
+    <link rel="stylesheet" type="text/css" href="Content/Layout.css" />
+
+    <!-- jQuery -->
+    <script src="../scripts/jquery-3.7.1.min.js"></script>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="../scripts/bootstrap.bundle.min.js"></script>
+    <!-- Custom Scripts -->
+    <script src="../scripts/Scripts.js"></script>
+    <script type="text/javascript" src="../Content/Script.js"></script>
+    <script type="text/javascript">
+
+        //========================================
+        // AI Chat Functionality
+        let isAiChatOpen = false;
+
+        function toggleAiChat() {
+            const modal = document.getElementById('aiChatModal');
+            const button = document.getElementById('aiFloatingButton');
+
+            if (isAiChatOpen) {
+                modal.classList.remove('active');
+                button.innerHTML = '<i class="fas fa-robot"></i>';
+            } else {
+                modal.classList.add('active');
+                button.innerHTML = '<i class="fas fa-times"></i>';
+                // Focus on input when opening
+                setTimeout(() => {
+                    const input = document.getElementById('aiChatInput');
+                    if (input) input.focus();
+                }, 300);
+            }
+
+            isAiChatOpen = !isAiChatOpen;
+        }
+
+        function handleAiChatInput(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                sendAiMessage();
+            }
+        }
+
+        function sendAiMessage() {
+            const input = document.getElementById('aiChatInput');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            // Add user message
+            addMessageToChat(message, 'user');
+            input.value = '';
+
+            // Simulate AI response (replace with actual API call)
+            simulateAiResponse(message);
+        }
+
+        function addMessageToChat(message, sender) {
+            const chatBody = document.getElementById('aiChatBody');
+            if (!chatBody) return;
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `ai-message ${sender}`;
+
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'ai-message-content';
+            contentDiv.textContent = message;
+
+            messageDiv.appendChild(contentDiv);
+            chatBody.appendChild(messageDiv);
+
+            // Scroll to bottom
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        function simulateAiResponse(userMessage) {
+            const chatBody = document.getElementById('aiChatBody');
+            if (!chatBody) return;
+
+            // Show typing indicator
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'ai-message bot';
+            typingDiv.id = 'typingIndicator';
+
+            const typingContent = document.createElement('div');
+            typingContent.className = 'ai-message-content';
+            typingContent.innerHTML = '<i class="fas fa-ellipsis-h"></i>';
+
+            typingDiv.appendChild(typingContent);
+            chatBody.appendChild(typingDiv);
+            chatBody.scrollTop = chatBody.scrollHeight;
+
+            // Simulate API delay and response
+            setTimeout(() => {
+                // Remove typing indicator
+                const typingIndicator = document.getElementById('typingIndicator');
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+
+                // Add AI response
+                let response = generateAiResponse(userMessage);
+                addMessageToChat(response, 'bot');
+            }, 1500);
+        }
+
+        function generateAiResponse(userMessage) {
+            const lowerMessage = userMessage.toLowerCase();
+            //const usernam = document.body.dataset.username;
+            //alert(usernam);
+            // Simple response logic - replace with actual AI integration
+            if (lowerMessage.includes('مرحبا') || lowerMessage.includes('اهلا') || lowerMessage.includes('hello')) {
+                return `مرحباً بك ! كيف يمكنني مساعدتك في نظام إدارة الواثقة للتأمين؟`;
+            } else if (lowerMessage.includes('كلمة المرور') || lowerMessage.includes('password')) {
+                return 'لإعادة تعيين كلمة المرور، يمكنك استخدام خيار "إعادة تعيين كلمة المرور" في قائمة حسابك.';
+            } else if (lowerMessage.includes('إشعار') || lowerMessage.includes('notification')) {
+                return 'يمكنك عرض جميع الإشعارات من خلال زر الجرس في أعلى الصفحة.';
+            } else if (lowerMessage.includes('شكرا') || lowerMessage.includes('thank')) {
+                return 'العفو! أنا هنا لمساعدتك دائماً.';
+            } else if (lowerMessage.includes('مساعدة') || lowerMessage.includes('help')) {
+                return 'يمكنني مساعدتك في: \n- إعادة تعيين كلمة المرور\n- عرض الإشعارات\n- استعراض القوائم\n- الإجابة على أسئلة النظام';
+            } else if (lowerMessage.includes('شج') || lowerMessage.includes('شن الجو')) {
+                return 'مليح';
+            } else {
+                return 'شكراً على سؤالك. أنا مساعد ذكي يمكنه مساعدتك في استخدام نظام الواثقة للتأمين. للأسف، إجاباتي محدودة حالياً ولكن يمكنني توجيهك إلى الميزات الرئيسية.';
+            }
+        }
+
+        // Initialize AI Chat - Modified approach for DevExpress compatibility
+        function initializeAIChat() {
+            const aiButton = document.getElementById('aiFloatingButton');
+            const closeButton = document.getElementById('aiCloseBtn');
+
+            if (aiButton) {
+                // Remove any existing event listeners and add new one
+                aiButton.onclick = function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleAiChat();
+                    return false;
+                };
+            }
+
+            if (closeButton) {
+                closeButton.onclick = function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleAiChat();
+                    return false;
+                };
+            }
+
+            // Close modal when clicking outside
+            document.addEventListener('click', function (event) {
+                if (!isAiChatOpen) return;
+
+                const modal = document.getElementById('aiChatModal');
+                const button = document.getElementById('aiFloatingButton');
+
+                if (modal && button &&
+                    !modal.contains(event.target) &&
+                    !button.contains(event.target)) {
+                    toggleAiChat();
+                }
+            });
+        }
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', initializeAIChat);
+
+        //Also initialize after any DevExpress callbacks
+        if (typeof cbNotify !== 'undefined') {
+            cbNotify.add_endCallback(function (s, e) {
+                setTimeout(initializeAIChat, 100);
+            });
+        }
+
+        //Initialize on window load as well
+        window.addEventListener('load', initializeAIChat);
+        // ========================================
+        function onRightMenuItemClick(s, e) {
+            //alert(e.item.name);
+            if (e.item.name === "ToggleRightPanel") {
+                toggleRightPanel();
+                e.processOnServer = false;
+            }
+            if (e.item.name === "ResetPass") {
+                e.processOnServer = false;
+                cbNotify.PerformCallback("Notify" + "|" + e.item.name);
+            }
+
+            if (e.item.name === "AccountItem")
+                e.processOnServer = false;
+        }
+
+        function preventBack() {
+            window.history.forward();
+        }
+        setTimeout("preventBack()", 0);
+        //window.onunload = function () { null };
+
+        function UpdateTimeoutTimer() {
+            clearTimeout(myTimeReminder);
+            clearTimeout(myTimeOut);
+
+            myTimeReminder = setTimeout('doReminder()', sessionTimeReminder);
+            myTimeOut = setTimeout('doRedirect()', sessionTimeout);
+        }
+        var hide = true;
+        function onBeginCallback(s, e) {
+            //lp.Show();
+        }
+        function onControlsInitialized(s, e) {
+            if (e.isCallback)
+                return;
+
+            createInterval();
+        }
+
+        function createInterval() {
+            setInterval(function () { hideLoadingPanel(); }, 100);
+        }
+        function checkHideFlag(control) {
+            if (control.InCallback())
+                hide = false;
+        }
+
+        function Notificationcall(Typ) {
+            //alert(Typ);
+            cbNotify.PerformCallback("Notify" + "|" + Typ);
+        }
+
+        function hideLoadingPanel() {
+            if (!lp.GetVisible())
+                return;
+            hide = true;
+            ASPxClientControl.GetControlCollection().ForEachControl(checkHideFlag);
+            if (hide)
+                lp.Hide();
+        }
+        function updateHeaderMenuOrientation() {
+            if (!window.headerMenu) return;
+            var orientation = headerPane.IsExpandable() ? 'Vertical' : 'Horizontal';
+            if (orientation !== headerMenu.GetOrientation())
+                headerMenu.SetOrientation(orientation);
+        }
+
+        function OnEndCallbackRoot(s, e) {
+            //alert(s.cpMyAttribute);
+            if (s.cpNewWindowUrl != null && s.cpMyAttribute == 'Display') {
+                //window.open(s.cpNewWindowUrl);
+                //PrintPop.SetSize(1000, 800);
+                let hdr = s.cpResult
+                let mhdr = ' '
+                BSPopup.SetHeaderText(mhdr.concat(hdr));
+                BSPopup.SetContentHtml(null);
+                BSPopup.SetContentUrl(s.cpNewWindowUrl);
+                BSPopup.Show();
+            }
+            if (s.cpNewWindowUrl != null && s.cpMyAttribute == 'ResetPass') {
+                //window.open(s.cpNewWindowUrl);
+                //PrintPop.SetSize(800, 300);
+                let hdr = s.cpResult
+                let mhdr = ' '
+                BSPopup.SetHeaderText(mhdr.concat(hdr));
+                BSPopup.SetContentHtml(null);
+                BSPopup.SetContentUrl(s.cpNewWindowUrl);
+                BSPopup.Show();
+            }
+            if (s.cpNewWindowUrl != null && s.cpMyAttribute == 'System Notifications') {
+                //window.open(s.cpNewWindowUrl);
+                //PrintPop.SetSize(800, 300);
+                let hdr = s.cpResult
+                let mhdr = ' '
+                BSPopup.SetHeaderText(mhdr.concat(hdr));
+                BSPopup.SetContentHtml(null);
+                BSPopup.SetContentUrl(s.cpNewWindowUrl);
+                BSPopup.Show();
+            }
+        }
+        function puOnInitr(s, e) {
+            AdjustSizer();
+            ASPxClientUtils.AttachEventToElement(window, "resize", function (evt) {
+                AdjustSizer();
+                if (s.IsVisible())
+                    s.UpdatePosition();
+            });
+        }
+
+        function AdjustSizer() {
+            var width = Math.max(0, document.documentElement.clientWidth) * 0.98;
+            var height = Math.max(0, document.documentElement.clientHeight) * 0.98;
+            BSPopup.SetWidth(width);
+            BSPopup.SetSize(width, height);
+
+        }
+        document.addEventListener("contextmenu", function (e) {
+            e.preventDefault();
+        }, false);
+    </script>
+
+    <style>
+        .custom-link {
+            color: #0d6efd !important;
+            text-decoration: underline !important;
+        }
+
+            .custom-link:hover {
+                color: #0a58ca !important;
+                text-decoration: underline !important;
+            }
+    </style>
+</head>
+<%--<body runat="server" id="Body"
+    data-userid='<%= HttpUtility.HtmlAttributeEncode(If(Session("userId"), "")) %>'
+    data-username='<%= HttpUtility.HtmlAttributeEncode(If(Session("User"), "")) %>'
+    data-notif-handler='../Handlers/NotificationsHandler.ashx'>--%>
+    <body data-userid='<%= HttpUtility.HtmlAttributeEncode(If(Session("UserId") Is Nothing, "", Session("UserId").ToString())) %>'
+      data-notif-handler='<%= ResolveUrl("~/Handlers/NotificationsHandler.ashx") %>'>
+
+    <form id="form1" runat="server">
+        <dx:ASPxCallback ID="ASPxCallback1" runat="server" ClientInstanceName="cbNotify" OnCallback="ASPxCallback1_Callback">
+            <ClientSideEvents EndCallback="OnEndCallbackRoot" />
+        </dx:ASPxCallback>
+
+        <!-- HeaderPane, menus, etc. (unchanged) -->
+        <dx:ASPxPanel ID="HeaderPane" runat="server" FixedPosition="WindowTop" ClientInstanceName="headerPane" CssClass="headerPane"
+            Collapsible="True" RightToLeft="True">
+            <SettingsAdaptivity CollapseAtWindowInnerWidth="500" />
+            <Styles>
+                <Panel CssClass="panel"></Panel>
+                <ExpandedPanel CssClass="expandedPanel"></ExpandedPanel>
+                <ExpandBar CssClass="bar"></ExpandBar>
+            </Styles>
+            <PanelCollection>
+                <dx:PanelContent runat="server">
+                    <div class="headerTop">
+                        <div class="auto-style1" hidden="hidden">
+                            <a href="~/" class="auto-style3"><span class="auto-style2">شركة مجموعة الخليج للتأمين</span></a>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; background: #dfeffc;">
+                        <!-- Notification Dropdown -->
+                        <div class="dropdown">
+                            <button
+                                class="profile-button"
+                                type="button"
+                                id="notificationButton"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                                aria-label="//">
+                                <!-- Bell Icon -->
+                                <i class="fas fa-bell fa-lg me-2 position-relative">
+                                    <!-- Unread Count Badge -->
+                                    <span class="badge bg-danger text-white position-absolute top-0 start-100 translate-middle"
+                                        id="unreadCount"
+                                        style="font-size: 0.6em; min-width: 1.25em; height: 1.25em; padding: 0.15em;">0
+                                    </span>
+                                </i>
+
+                                <!-- Text with Hidden Counter (for screen readers) -->
+                                <%--<span class="d-none d-md-inline me-2">إشعارات</span>--%>
+                            </button>
+
+                            <!-- Dropdown Menu -->
+                            <ul
+                                class="dropdown-menu dropdown-menu-end shadow border-0"
+                                id="notificationList"
+                                style="max-height: 300px; overflow-y: auto; width: 300px; direction: rtl; text-align: right;">
+                                <!-- Notifications will be injected here -->
+                            </ul>
+                        </div>
+                        <dx:ASPxMenu runat="server" ID="RightAreaMenu" ClientInstanceName="rightAreaMenu" RightToLeft="False"
+                            ItemAutoWidth="false" ItemWrap="false" ShowPopOutImages="False"
+                            SeparatorWidth="0" ApplyItemStyleToTemplates="true"
+                            Width="100%" CssClass="header-menu" OnItemClick="RightAreaMenu_ItemClick">
+                            <ItemStyle VerticalAlign="Middle" CssClass="item" />
+                            <SubMenuItemStyle CssClass="item" />
+                            <SubMenuStyle CssClass="header-sub-menu" />
+                            <Items>
+                                <dx:MenuItem Name="AccountItem" ItemStyle-CssClass="image-item">
+                                    <ItemStyle CssClass="image-item"></ItemStyle>
+                                    <TextTemplate>
+                                        <div class="account-background">
+                                            <div runat="server" id="AccountImage" class="empty-image" />
+                                        </div>
+                                    </TextTemplate>
+                                    <Items>
+                                        <dx:MenuItem Name="SignInItem" Text="Sign in" NavigateUrl="~/Account/SignIn.aspx"></dx:MenuItem>
+                                        <dx:MenuItem Name="RegisterItem" Text="Register" NavigateUrl="~/Account/Register.aspx">
+                                        </dx:MenuItem>
+                                        <dx:MenuItem Name="MyAccountItem" Text="My account" ItemStyle-CssClass="myaccount-item">
+                                            <ItemStyle CssClass="myaccount-item"></ItemStyle>
+                                            <TextTemplate>
+                                                <div class="user-info">
+                                                    <div class="avatar">
+                                                        <img runat="server" id="AvatarUrl" src="Content/Images/user.svg" aria-label="//" />
+                                                    </div>
+                                                    <div class="text-container">
+                                                        <dx:ASPxLabel ID="UserNameLabel" runat="server" CssClass="user-name"></dx:ASPxLabel>
+                                                        <dx:ASPxLabel ID="EmailLabel" runat="server" CssClass="email"></dx:ASPxLabel>
+                                                    </div>
+                                                </div>
+                                            </TextTemplate>
+                                        </dx:MenuItem>
+                                        <dx:MenuItem Name="ResetPass" Text="إعادة تعيين كلمة المرور" ItemStyle-CssClass="text-reset">
+                                            <ItemStyle CssClass="myaccount-item"></ItemStyle>
+                                            <TextTemplate>
+                                                <div class="user-info">
+                                                    <div>
+                                                        <dx:ASPxLabel ID="Reset" runat="server" CssClass="email" Text="إعادة تعيين كلمة المرور"></dx:ASPxLabel>
+                                                        <img runat="server" id="ResetUrl" style="height: 25px;" src="Content/Images/reset-password-svgrepo-com.svg" aria-label="//" />
+                                                    </div>
+                                                </div>
+                                            </TextTemplate>
+                                        </dx:MenuItem>
+                                        <dx:MenuItem Name="SignOutItem" Image-ToolTip="تسجيل الخروج">
+                                            <ItemStyle CssClass="myaccount-item"></ItemStyle>
+                                            <TextTemplate>
+                                                <div class="user-info">
+                                                    <div>
+                                                        <dx:ASPxLabel ID="SOut" runat="server" CssClass="email" Text="تسجيل الخروج"></dx:ASPxLabel>
+                                                        <img runat="server" id="SignOutUrl" style="height: 25px;"
+                                                            src="Content/Images/sign-out.svg" aria-label="//" />
+                                                    </div>
+                                                </div>
+                                            </TextTemplate>
+                                        </dx:MenuItem>
+                                    </Items>
+                                </dx:MenuItem>
+                            </Items>
+                            <ClientSideEvents ItemClick="onRightMenuItemClick" />
+                        </dx:ASPxMenu>
+                    </div>
+
+                    <div class="headerMenu">
+                        <dx:ASPxMenu ID="HeaderMenu" runat="server" CssClass="headerMenu" ClientInstanceName="headerMenu" Width="100%"
+                            DataSourceID="XmlDataSourceHeader">
+                        </dx:ASPxMenu>
+                    </div>
+                </dx:PanelContent>
+            </PanelCollection>
+            <ExpandBarTemplate>
+                <div class="templateTitle">
+                    <%-- <a id="TitleLink" href="~/" runat="server">شركة تيبستي للتأمين</a>--%>
+                    <%--  <asp:Image ID="Image1" runat="server" Height="60px" ImageUrl="~/Bootstrap/login/css/login-box-backg.png" Width="110px" />--%>
+                    <dx:ASPxImage ID="ASPxImage1" runat="server" ImageUrl="~/Bootstrap/login/css/login-box-backg.png" ShowLoadingImage="true"
+                        Width="60%" ImageAlign="Left">
+                    </dx:ASPxImage>
+                </div>
+            </ExpandBarTemplate>
+        </dx:ASPxPanel>
+
+        <!-- GlobalEvents, LoadingPanel, MainPane, XmlDataSource, Popup (unchanged) -->
+        <dx:ASPxGlobalEvents runat="server">
+            <ClientSideEvents ControlsInitialized="updateHeaderMenuOrientation" BrowserWindowResized="updateHeaderMenuOrientation" />
+        </dx:ASPxGlobalEvents>
+        <dx:ASPxGlobalEvents runat="server" ID="GlobalEvents">
+            <ClientSideEvents ControlsInitialized="onControlsInitialized" BeginCallback="onBeginCallback" />
+        </dx:ASPxGlobalEvents>
+        <dx:ASPxLoadingPanel ID="ASPxLoadingPanel1" runat="server" ClientInstanceName="lp" Modal="True" Text="تحميل ..." ImagePosition="Bottom" />
+        <dx:ASPxPanel ID="MainPane" runat="server" CssClass="mainContentPane">
+            <PanelCollection>
+                <dx:PanelContent runat="server">
+                    <asp:ContentPlaceHolder ID="Content" runat="server" />
+                </dx:PanelContent>
+            </PanelCollection>
+        </dx:ASPxPanel>
+        <asp:XmlDataSource ID="XmlDataSourceHeader" runat="server" DataFile="~/App_Data/TopMenu.xml" XPath="/items/*" />
+        <dx:ASPxPopupControl ID="BSPopup" runat="server" ClientInstanceName="BSPopup" AutoUpdatePosition="true" AllowResize="true" Modal="true"
+            ShowCollapseButton="true" ShowMaximizeButton="true">
+            <ClientSideEvents Init="puOnInitr" />
+        </dx:ASPxPopupControl>
+        <!-- Floating AI Agent Button -->
+        <button type="button" class="ai-floating-button" id="aiFloatingButton" title="AI Assistant">
+            <i class="fas fa-robot"></i>
+        </button>
+
+        <!-- AI Chat Modal -->
+        <div class="ai-chat-modal" id="aiChatModal">
+            <div class="ai-chat-header">
+                <h5>المساعد الذكي</h5>
+                <button type="button" class="ai-close-btn" id="aiCloseBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="ai-chat-body" id="aiChatBody">
+                <div class="ai-message bot">
+                    <div class="ai-message-content">
+                        مرحباً! أنا المساعد الذكي. كيف يمكنني مساعدتك اليوم؟
+                    </div>
+                </div>
+            </div>
+            <div class="ai-chat-footer">
+                <input type="text" class="ai-chat-input" id="aiChatInput"
+                    placeholder="اكتب رسالتك هنا..."
+                    onkeypress="handleAiChatInput(event)" />
+            </div>
+        </div>
+    </form>
+
+    <script>
+        const userId = document.body.dataset.userid;
+        const BaseUrl = document.body.dataset.notifHandler;
+
+        $(document).ready(function () {
+            new bootstrap.Dropdown(document.getElementById('notificationButton'), { autoClose: true });
+            $('#notificationButton').on('show.bs.dropdown', loadNotifications);
+            setInterval(loadNotifications, 30000); // Refresh every 60 sec
+        });
+        function parseMicrosoftDate(dateString) {
+            if (!dateString) return null;
+            const match = dateString.match(/\/Date\((\d+)(?:[+-]\d+)?\)\//);
+            if (match) {
+                // Assume DB stores Libya time (UTC+2), but JS treats it as UTC → subtract 2h
+                return new Date(parseInt(match[1]) - (2 * 60 * 60 * 1000));
+            }
+            return new Date(dateString);
+        }
+
+        function loadNotifications() {
+            if (!userId) return;
+
+            $.ajax({
+                url: `${BaseUrl}?userId=${encodeURIComponent(userId)}`,
+                method: "GET",
+                dataType: "json",
+                success: function (data) {
+                    let html = "";
+                    let unreadCount = 0;
+
+                    if (!data || data.length === 0) {
+                        html = `
+                            <li class="dropdown-item text-center text-muted">لا توجد إشعارات حالياُ</li>
+                            <li class="dropdown-item text-center">
+                                <a onclick="Notificationcall('${notification.Type}')" class="btn btn-dark w-100" style="color: white;"> قراءة جميع الإشعارات</a>
+                            </li>`;
+                    } else {
+                        $.each(data, function (index, notification) {
+                            //debugger;
+                            const status = notification.IsRead ? "text-muted" : "fw-bold";
+                            const dateObj = parseMicrosoftDate(notification.Timestamp);
+                            const timestamp = dateObj.toLocaleString("ar-ly");
+                            html += `
+                                 <li class="notification-item ${status}" data-id="${notification.Id}">
+                                    <a onclick="Notificationcall('${notification.Type}')" class="d-flex align-items-start custom-link">
+                                     <div class="d-flex flex-column text-end w-100">
+                                     <div class="message" dir="rtl">${notification.Message} من ${notification.GeneratedBy}</div>
+                                     <small class="timestamp mt-1">${timestamp}</small>
+                                     </div>
+                                    </a>
+                                 </li>`;
+                            if (!notification.IsRead) unreadCount++;
+                        });
+                    }
+
+                    $("#notificationList").html(html);
+                    $("#unreadCount").text(unreadCount > 0 ? unreadCount : "");
+                },
+                error: function (xhr, status, error) {
+                    //console.error("Failed to load notifications:", error);
+                    $("#notificationList").html(`<li class="dropdown-item text-center text-muted">تعذر تحميل الإشعارات</li>`);
+                    $("#unreadCount").text("");
+                }
+            });
+        }
+
+        $(document).on("click", "#notificationList li", function () {
+            const id = $(this).data("id");
+            if (!id) return;
+
+            $.ajax({
+                url: `${BaseUrl}?id=${encodeURIComponent(id)}&userId=${encodeURIComponent(userId)}`,
+                method: "POST",
+                success: function () {
+                    loadNotifications();
+                },
+                error: function () {
+                    console.error("Failed to mark notification as read");
+                }
+            });
+        });
+    </script>
+</body>
+</html>

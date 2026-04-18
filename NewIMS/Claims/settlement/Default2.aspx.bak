@@ -1,0 +1,198 @@
+﻿<%@ Page Language="VB" AutoEventWireup="false" Inherits="TakafulyIMS.ClaimsManage_settlement_Default2" Codebehind="Default2.aspx.vb" %>
+
+<%@ Register TagPrefix="dx" Namespace="DevExpress.Web.ASPxEditors" Assembly="DevExpress.Web.ASPxEditors.v11.2" %>
+<%@ Register TagPrefix="dx" Namespace="DevExpress.Web.ASPxTabControl" Assembly="DevExpress.Web.v11.2" %>
+<%@ Register TagPrefix="dx" Namespace="DevExpress.Web.ASPxGridView" Assembly="DevExpress.Web.ASPxGridView.v11.2" %>
+<%@ Register TagPrefix="dx" Namespace="DevExpress.Web.ASPxClasses" Assembly="DevExpress.Web.v11.2" %>
+<%@ Register Assembly="DevExpress.Web.v11.2, Version=11.2.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.Web.ASPxRoundPanel" TagPrefix="dx" %>
+<%@ Register assembly="DevExpress.Web.v11.2" namespace="DevExpress.Web.ASPxPanel" tagprefix="dx" %>
+<%@ Register assembly="DevExpress.Web.ASPxEditors.v11.2" namespace="DevExpress.Web.ASPxEditors" tagprefix="dx" %>
+<%@ Register assembly="DevExpress.Web.ASPxGridView.v11.2, Version=11.2.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.Web.ASPxGridView" tagprefix="dx" %>
+<%@ Register assembly="DevExpress.Web.ASPxGridView.v11.2" namespace="DevExpress.Web.ASPxGridView" tagprefix="dx" %>
+<%@ Register assembly="DevExpress.Web.ASPxGridView.v11.2.Export" namespace="DevExpress.Web.ASPxGridView.Export" tagprefix="dx" %>
+<%@ Register assembly="DevExpress.Web.v11.2" namespace="DevExpress.Web.ASPxLoadingPanel" tagprefix="dx" %>
+
+<%@ Register assembly="DevExpress.Web.v11.2" namespace="DevExpress.Web.ASPxPanel" tagprefix="dx" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <div>
+            <dx:ASPxGridView ID="masterGrid" runat="server" AutoGenerateColumns="False" DataSourceID="SqlDataMainSettlement"
+            KeyFieldName="No;ClmNo;TPID" ClientInstanceName="masterGrid"
+            OnRowDeleting="Grid_RowDeleting" OnRowInserting="Grid_RowInserting" OnRowUpdating="Grid_RowUpdating" Width="100%" RightToLeft="True" CssFilePath="~/App_Themes/PlasticBlue/{0}/styles.css" CssPostfix="PlasticBlue">
+        <Columns>
+            <dx:GridViewCommandColumn NewButton-Visible="true" EditButton-Visible="true" DeleteButton-Visible="true" VisibleIndex="0">
+                <EditButton Visible="True"></EditButton>
+
+                <NewButton Visible="True"></NewButton>
+
+                <DeleteButton Visible="True"></DeleteButton>
+            </dx:GridViewCommandColumn>
+            <dx:GridViewDataTextColumn FieldName="No" ReadOnly="True" VisibleIndex="1" Caption="رقم التسوية">
+            </dx:GridViewDataTextColumn>
+            <dx:GridViewDataTextColumn FieldName="SettelementDesc" VisibleIndex="2" Caption="وصف التسوية">
+            </dx:GridViewDataTextColumn>
+            <dx:GridViewDataTextColumn FieldName="Date" VisibleIndex="3" Caption="تاريخها">
+            </dx:GridViewDataTextColumn>
+            <dx:GridViewDataTextColumn FieldName="ClmNo" VisibleIndex="4" Visible="false">
+            </dx:GridViewDataTextColumn>
+            <dx:GridViewDataTextColumn FieldName="TPID" VisibleIndex="5" Visible="false">
+            </dx:GridViewDataTextColumn>
+            <dx:GridViewDataTextColumn FieldName="Net" VisibleIndex="6">
+            </dx:GridViewDataTextColumn>
+        </Columns>
+                <images spritecssfilepath="~/App_Themes/PlasticBlue/{0}/sprite.css">
+                    <loadingpanelonstatusbar url="~/App_Themes/PlasticBlue/GridView/gvLoadingOnStatusBar.gif">
+                    </loadingpanelonstatusbar>
+                    <loadingpanel url="~/App_Themes/PlasticBlue/GridView/Loading.gif">
+                    </loadingpanel>
+                </images>
+                <imagesfiltercontrol>
+                    <loadingpanel url="~/App_Themes/PlasticBlue/Editors/Loading.gif">
+                    </loadingpanel>
+                </imagesfiltercontrol>
+                <styles cssfilepath="~/App_Themes/PlasticBlue/{0}/styles.css" csspostfix="PlasticBlue">
+                    <header imagespacing="10px" sortingimagespacing="10px">
+                    </header>
+                </styles>
+                <styleseditors>
+                    <calendarheader spacing="11px">
+                    </calendarheader>
+                    <progressbar height="25px">
+                    </progressbar>
+                </styleseditors>
+            <Templates>
+                <DetailRow>
+                    <dx:ASPxGridView ID="detailGrid" runat="server" AutoGenerateColumns="False" DataSourceID="SqlDataDetails" Width="100%"
+                        KeyFieldName="No;TPID;ClmNo" ClientInstanceName="detailGrid" OnBeforePerformDataSelect="detailGrid_BeforePerformDataSelect"
+                        OnRowDeleting="Grid_RowDeleting" OnRowInserting="Grid_RowInserting" OnRowUpdating="Grid_RowUpdating" CssFilePath="~/App_Themes/PlasticBlue/{0}/styles.css" CssPostfix="PlasticBlue">
+                        <Columns>
+                            <dx:GridViewCommandColumn NewButton-Visible="true" EditButton-Visible="true" DeleteButton-Visible="true" VisibleIndex="0">
+                            </dx:GridViewCommandColumn>
+                            <dx:GridViewDataTextColumn FieldName="ClmNo" ReadOnly="True" VisibleIndex="1">
+                                <EditFormSettings Visible="False" />
+                            </dx:GridViewDataTextColumn>
+                            <dx:GridViewDataTextColumn FieldName="No" VisibleIndex="2">
+                            </dx:GridViewDataTextColumn>
+                            <dx:GridViewDataDateColumn FieldName="PaymentDesciption" VisibleIndex="3">
+                            </dx:GridViewDataDateColumn>
+                            <dx:GridViewDataTextColumn FieldName="Value" VisibleIndex="4">
+                            </dx:GridViewDataTextColumn>
+                        </Columns>
+                        <SettingsPager ShowDefaultImages="False">
+                            <AllButton Text="All"></AllButton>
+
+                            <NextPageButton Text="Next &gt;"></NextPageButton>
+
+                            <PrevPageButton Text="&lt; Prev"></PrevPageButton>
+                        </SettingsPager>
+
+                        <Images SpriteCssFilePath="~/App_Themes/PlasticBlue/{0}/sprite.css">
+                            <LoadingPanelOnStatusBar Url="~/App_Themes/PlasticBlue/GridView/gvLoadingOnStatusBar.gif"></LoadingPanelOnStatusBar>
+
+                            <LoadingPanel Url="~/App_Themes/PlasticBlue/GridView/Loading.gif"></LoadingPanel>
+                        </Images>
+
+                        <ImagesFilterControl>
+                            <LoadingPanel Url="~/App_Themes/PlasticBlue/Editors/Loading.gif"></LoadingPanel>
+                        </ImagesFilterControl>
+
+                        <Styles CssPostfix="PlasticBlue" CssFilePath="~/App_Themes/PlasticBlue/{0}/styles.css">
+                            <Header SortingImageSpacing="10px" ImageSpacing="10px"></Header>
+                        </Styles>
+
+                        <StylesEditors>
+                            <CalendarHeader Spacing="11px"></CalendarHeader>
+
+                            <ProgressBar Height="25px"></ProgressBar>
+                        </StylesEditors>
+                    </dx:ASPxGridView>
+                </DetailRow>
+            </Templates>
+                <settingspager showdefaultimages="False">
+                    <allbutton text="All">
+                    </allbutton>
+                    <nextpagebutton text="Next &gt;">
+                    </nextpagebutton>
+                    <prevpagebutton text="&lt; Prev">
+                    </prevpagebutton>
+                </settingspager>
+            <SettingsDetail ShowDetailRow="True" />
+        </dx:ASPxGridView>
+        <asp:SqlDataSource runat="server" ID="SqlDataMainSettlement" ConnectionString='<%$ ConnectionStrings:IMSDBConnectionString %>'
+            SelectCommand="SELECT  MainSattelement.ClmNo, MainSattelement.TPID, MainSattelement.No, MainSattelement.PayTo, MainSattelement.SettelementDesc, MainSattelement.Date, SUM(DetailSettelement.Value) AS Net
+                            FROM  MainSattelement INNER JOIN
+                            DetailSettelement ON DetailSettelement.ClmNo = MainSattelement.ClmNo AND DetailSettelement.TPID = MainSattelement.TPID AND DetailSettelement.No = MainSattelement.No
+                            WHERE (MainSattelement.ClmNo = @ClmNo) AND (MainSattelement.TPID = @TPID)
+                            GROUP BY MainSattelement.ClmNo, MainSattelement.TPID, MainSattelement.No, MainSattelement.PayTo, MainSattelement.SettelementDesc, MainSattelement.Date">
+            <SelectParameters>
+                <asp:QueryStringParameter QueryStringField="ClmNo" DefaultValue="0" Name="ClmNo"></asp:QueryStringParameter>
+                <asp:QueryStringParameter QueryStringField="TPID" DefaultValue="0" Name="TPID"></asp:QueryStringParameter>
+            </SelectParameters>
+        </asp:SqlDataSource>
+        <asp:AccessDataSource ID="SqlDataSourceCustomers" runat="server" DataFile="~/App_Data/nwind.mdb"
+                DeleteCommand="DELETE FROM [Customers] WHERE [CustomerID] = ?" 
+                InsertCommand="INSERT INTO [Customers] ([CustomerID], [CompanyName], [ContactName], [Country]) VALUES (?, ?, ?, ?)"
+                SelectCommand="SELECT [CustomerID], [CompanyName], [ContactName], [Country] FROM [Customers]"
+                UpdateCommand="UPDATE [Customers] SET [CompanyName] = ?, [ContactName] = ?, [Country] = ? WHERE [CustomerID] = ?">
+                <DeleteParameters>
+                    <asp:Parameter Name="CustomerID" Type="String" />
+                </DeleteParameters>
+                <UpdateParameters>
+                    <asp:Parameter Name="CompanyName" Type="String" />
+                    <asp:Parameter Name="ContactName" Type="String" />
+                    <asp:Parameter Name="Country" Type="String" />
+                    <asp:Parameter Name="CustomerID" Type="String" />
+                </UpdateParameters>
+                <InsertParameters>
+                    <asp:Parameter Name="CustomerID" Type="String" />
+                    <asp:Parameter Name="CompanyName" Type="String" />
+                    <asp:Parameter Name="ContactName" Type="String" />
+                    <asp:Parameter Name="Country" Type="String" />
+                </InsertParameters>
+            </asp:AccessDataSource>
+            <asp:AccessDataSource ID="SqlDataSourceOrders" runat="server" DataFile="~/App_Data/nwind.mdb"
+                DeleteCommand="DELETE FROM [Orders] WHERE [OrderID] = ?" 
+                InsertCommand="INSERT INTO [Orders] ([OrderID], [CustomerID], [OrderDate], [ShipName], [Freight]) VALUES (?, ?, ?, ?, ?)"
+                SelectCommand="SELECT [OrderID], [CustomerID], [OrderDate], [ShipName], [Freight] FROM [Orders] WHERE ([CustomerID] = ?)"
+                UpdateCommand="UPDATE [Orders] SET [CustomerID] = ?, [OrderDate] = ?, [ShipName] = ?, [Freight] = ? WHERE [OrderID] = ?">
+                <DeleteParameters>
+                    <asp:Parameter Name="OrderID" Type="Int32" />
+                </DeleteParameters>
+                <UpdateParameters>
+                    <asp:Parameter Name="CustomerID" Type="String" />
+                    <asp:Parameter Name="OrderDate" Type="DateTime" />
+                    <asp:Parameter Name="ShipName" Type="String" />
+                    <asp:Parameter Name="Freight" Type="Decimal" />
+                    <asp:Parameter Name="OrderID" Type="Int32" />
+                </UpdateParameters>
+                <InsertParameters>
+                    <asp:Parameter Name="OrderID" Type="Int32" />
+                    <asp:Parameter Name="CustomerID" Type="String" />
+                    <asp:Parameter Name="OrderDate" Type="DateTime" />
+                    <asp:Parameter Name="ShipName" Type="String" />
+                    <asp:Parameter Name="Freight" Type="Decimal" />
+                </InsertParameters>
+                <SelectParameters>
+                    <asp:SessionParameter DefaultValue="ANTON" Name="ClmNo" SessionField="ClmNo" Type="String" />
+                </SelectParameters>
+            </asp:AccessDataSource>
+                          <asp:SqlDataSource runat="server" ID="SqlDataDetails" ConnectionString='<%$ ConnectionStrings:IMSDBConnectionString %>'
+            SelectCommand="SELECT [No], [TPID], [ClmNo], [PaymentDesciption], [Value] FROM [DetailSettelement] WHERE (([ClmNo] = @ClmNo) AND ([No] = @No) AND ([TPID] = @TPID))">
+            <SelectParameters>
+                <asp:SessionParameter DefaultValue="0" Name="ClmNo" SessionField="ClmNo" Type="String" />
+                <asp:SessionParameter DefaultValue="0" Name="No" SessionField="No" Type="Int32" />
+                <asp:QueryStringParameter QueryStringField="TPID" DefaultValue="0" Name="TPID" Type="Int16">
+
+                </asp:QueryStringParameter>
+
+            </SelectParameters>
+                    </asp:SqlDataSource>
+        </div>
+    </form>
+</body>
+</html>

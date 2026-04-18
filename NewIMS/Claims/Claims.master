@@ -1,0 +1,87 @@
+<%@ Master Language="C#" MasterPageFile="~/InsSystem.master"%>
+<%@ Register Assembly="RadTabStrip.Net2" Namespace="Telerik.WebControls" TagPrefix="radTS" %>
+
+<script runat="server">
+
+    void Page_Init(object sender, EventArgs e) {
+
+    }
+
+    void Page_Load(object sender, EventArgs e)
+ {
+        if (Page.Request.QueryString["sys"] == null)
+        {
+            MainBody.Visible = false;
+        }
+        else
+        {
+            MainBody.Visible = true;
+        }
+        //SiteMapDataSource1.SiteMapProvider = "~/PolicyManagement/web.sitemap";
+        Response.Cache.SetNoServerCaching();
+        Response.Cache.SetCacheability(HttpCacheability.NoCache);
+        Response.Cache.SetNoStore();
+
+        Master.Page.Title = "‰Ÿ«„ «·„ÿ«·»« ";
+
+            System.Web.UI.WebControls.SqlDataSource SQL = (SqlDataSource)MainBody.FindControl("SqlDataSource1");
+            RadDatePicker CurDay = (RadDatePicker)MainBody.FindControl("RadDatePicker1");
+            if (SQL != null)
+            {
+               SQL.ConnectionString = ConfigurationManager.ConnectionStrings["IMSDBConnectionString"].ConnectionString;
+                SQL.SelectCommand = "select MainClaimFile.PolNo,MainClaimFile.ClmSysDate,MainClaimFile.ClmDate,PolicyFile.EndNo,PolicyFile.LoadNo,ClmNo,ClmInfDate,TotPRM,CustName,MainClaimFile.Status,PolicyFile.EntryDate as Entry "
+         +"from PolicyFile LEFT OUTER JOIN CustomerFile on PolicyFile.CustNo=CustomerFile.CustNo,MainClaimFile"
+  +"where MainClaimFile.PolNo=PolicyFile.PolNo and PolicyFile.EndNo=MainClaimFile.EndNo AND PolicyFile.LoadNo=MainClaimFile.LoadNo "
+            +"and (MainClaimFile.SubIns='02')"
+           +"	AND MainClaimFile.Branch='" + Master.Session["Branch"] + "' Order By ClmNo Desc";
+               
+            if (this.Session["sel"] == null)
+            {
+                Session.Add("Sel", SQL.SelectCommand);
+
+            }
+            else
+            {
+                SQL.SelectCommand = (string)this.Session["sel"];
+            }
+                SQL.SelectCommandType = SqlDataSourceCommandType.Text;
+                SQL.Select(System.Web.UI.DataSourceSelectArguments.Empty);
+            }
+
+
+            Session.Add("Tree", TreeView1);
+
+    }
+
+    protected void MainBody_Load(object sender, EventArgs e)
+    {
+    }
+
+    protected void MainBody_Init(object sender, EventArgs e)
+    {
+        System.Web.UI.WebControls.GridView Grid = (GridView)MainBody.FindControl("GridView1");
+        if (Grid != null) {
+            Grid.DataBind();
+        }
+
+        Session.Add("Tree", TreeView1);
+    }
+</script>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="Nav" Runat="Server" >
+    <asp:TreeView  Align="right" ID="TreeView1"  MaxDataBindDepth="1" Runat="server" ShowExpandCollapse="False"
+        NodeIndent="10" ShowLines="false">
+        <LevelStyles>
+            <asp:TreeNodeStyle NodeSpacing="2"  Font-Size="smaller" Font-Bold="True"  Font-Names="K Nasim" /> 
+            <asp:TreeNodeStyle NodeSpacing="2"  Font-Size="8" HorizontalPadding="4" ImageUrl="~/Images/Bullet_Nav_Big.gif"  /> 
+            <asp:TreeNodeStyle NodeSpacing="2" Font-Size="8" ImageUrl="~/Images/Bullet_Nav_small.gif" /> 
+        </LevelStyles>
+        <SelectedNodeStyle Font-Underline="true" />
+        <NodeStyle ChildNodesPadding="10" Font-Size="1em"  />
+    </asp:TreeView>                    
+    <asp:SiteMapDataSource  ID="SiteMapDataSource1"   ShowStartingNode="false" StartingNodeUrl="~/ClaimsManage/Default.aspx" Runat="server" />
+</asp:Content>
+        
+<asp:Content ID="Content2" ContentPlaceHolderID="Main_Body" Runat="Server">  
+    <asp:ContentPlaceHolder ID="MainBody" Runat="server" OnLoad="MainBody_Load" OnInit="MainBody_Init" />
+</asp:Content>

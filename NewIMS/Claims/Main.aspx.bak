@@ -1,0 +1,547 @@
+﻿<%@ Page Language="VB" AutoEventWireup="false" MasterPageFile="Main.master" Inherits="TakafulyIMS.PolicyManagement_Main" Codebehind="Main.aspx.vb" %>
+
+<%@ Register TagPrefix="dx" Namespace="DevExpress.Web.ASPxEditors" Assembly="DevExpress.Web.ASPxEditors.v11.2" %>
+<asp:Content  ID="Content1" ContentPlaceHolderID="Data" Runat="Server" >
+    <script type="text/javascript" language="javascript">
+        
+        var rowVisibleIndex;
+        function OnInit(s, e) {
+            AdjustSize();
+        }
+        function OnEndCallback(s, e) {
+            AdjustSize();
+        }
+        function OnControlsInitialized(s, e) {
+            ASPxClientUtils.AttachEventToElement(window, "resize", function (evt) {
+                AdjustSize();
+            });
+        }
+        function AdjustSize() {
+            var height = Math.max(0, document.documentElement.clientHeight);
+            grid.SetHeight(height-250);
+        }
+        function SetSystem(sys, br) {
+           
+            SysTxt.SetValue(sys);
+            Branch.SetValue(br);
+            grid.PerformCallback(sys);
+           
+        }
+        function GetPickUpPoints(values) {
+           
+            PickUpPoints = values;
+            if (rowVisibleIndex == 'توزيع الحادث') {
+                
+               PolicyIssu('../ReInsurance/DestributeClaim.aspx?ClmNo=' + values);
+               rowVisibleIndex = '';
+               grid.Refresh();
+            }
+            if (rowVisibleIndex == 'أمر توريد') {
+                ShowScanPopup(values, 2);
+                rowVisibleIndex = '';
+            }
+            if (rowVisibleIndex == 'تحرير الوثيقة') {
+                var Path;
+                var system = SysTxt.GetValue();
+                if (system == '01') { Path = '../PolicyManagement/MCMOTOR/IssuPolicy.aspx'; }
+                if (system == 'OR') { Path = '../PolicyManagement/MCMOTOR/Orange.aspx'; }
+                if (system == 'AT') { Path = '../PolicyManagement/MCMOTOR/LibyaAssist.aspx?sys=AT'; }
+                if (system == '02') { Path = '../PolicyManagement/MOMOTOR/Issu.aspx'; }
+                if (system == '03') { Path = '../PolicyManagement/MOMOTOR/Issu.aspx'; }
+                if (system == '04') { Path = '../PolicyManagement/CARGO/CARGO.aspx'; }
+                if (system == '05') { Path = '../PolicyManagement/CARGO/CARGO.aspx'; }
+                if (system == '06') { Path = '../PolicyManagement/CARGO/HullIssu.aspx'; }
+                if (system == '08') { Path = '../PolicyManagement/GeneralAccedent/BetSecret.aspx'; }
+                if (system == '10') { Path = '../PolicyManagement/GeneralAccedent/CashInSafe.aspx'; }
+                if (system == '11') { Path = '../PolicyManagement/GeneralAccedent/SevResponsibility.aspx'; }
+                if (system == '12') { Path = '../PolicyManagement/GeneralAccedent/Banking.aspx'; }
+                if (system == '14') { Path = '../PolicyManagement/GeneralAccedent/EngAcc.aspx'; }
+                if (system == '13') { Path = '../PolicyManagement/GeneralAccedent/CashInTransit.aspx'; }
+                if (system == '15') { Path = '../PolicyManagement/GeneralAccedent/EngAcc.aspx'; }
+                if (system == '16') { Path = '../PolicyManagement/GeneralAccedent/Machines.aspx'; }
+                if (system == '18') { Path = '../PolicyManagement/GeneralAccedent/JobResponsbility.aspx'; }
+                if (system == '19') { Path = '../PolicyManagement/GeneralAccedent/AllRisk.aspx'; }
+                if (system == '21') { Path = '../PolicyManagement/Burglary/Issu.aspx'; }
+                if (system == '22') { Path = '../PolicyManagement/Fire/Issu.aspx'; }
+                if (system == '23') { Path = '../PolicyManagement/Family/Issu.aspx'; }
+                if (system == '26') { Path = '../PolicyManagement/CARGO/Aviation.aspx'; }
+                if (system == '27') { Path = '../PolicyManagement/Life/TravelServ.aspx'; }
+                if (system == 'MD') { Path = '../PolicyManagement/Life/Medical_Responspility.aspx'; }
+                PolicyIssu(Path + '?Order=' + values);
+                rowVisibleIndex = '';
+            }
+            if (rowVisibleIndex == 'إصدار وثيقة') {
+                Msgpopup.SetSize(500, 150);
+                Msgpopup.SetContentUrl('Msg.aspx?Order=' + values);
+                Msgpopup.Show();
+            }
+            if (rowVisibleIndex == 'الغاء الطلب') {
+                Msgpopup.SetSize(500, 150);
+                Msgpopup.SetContentUrl('Msg.aspx?Order=' + values);
+                Msgpopup.Show();
+            }
+        }
+        function OnGetRowValues(values) {
+        }
+        
+        function ShowScanPopup(customerID,flag) {
+            var viewportwidth;
+            var viewportheight;
+            if (typeof window.innerWidth != 'undefined') {
+                viewportwidth = window.innerWidth;
+                viewportheight = window.innerHeight
+            }
+            else if (typeof document.documentElement != 'undefined' && typeof document.documentElement.clientWidth != 'undefined' && document.documentElement.clientWidth != 0)
+            {
+                viewportwidth = document.documentElement.clientWidth;
+                viewportheight = document.documentElement.clientHeight
+            }
+            popup.SetSize(viewportwidth, viewportheight);
+            if (flag == 1) {
+                popup.SetContentUrl('../OutPutManagement/PreView.aspx?OrderNo=' + customerID);
+            }
+            else {
+                popup.SetContentUrl('../OutPutManagement/PreView.aspx?Report=/TakafulyReports/Chasher&OrderNo=' + customerID);
+            }
+            popup.Show();
+        }
+        function ShowIssuClip(Report, SubIns, Branch, TDate) {
+            var viewportwidth;
+            var viewportheight;
+            if (typeof window.innerWidth != 'undefined') {
+                viewportwidth = window.innerWidth;
+                viewportheight = window.innerHeight
+            }
+            else if (typeof document.documentElement != 'undefined'
+                    && typeof document.documentElement.clientWidth != 'undefined' && document.documentElement.clientWidth != 0) {
+                viewportwidth = document.documentElement.clientWidth;
+                viewportheight = document.documentElement.clientHeight
+            }
+            popup.SetSize(viewportwidth, viewportheight);
+            popup.SetContentUrl('../OutPutManagement/PreView.aspx?Report=' + Report + '&Sys=' + SubIns + '&Today=' + TDate);
+            popup.Show();
+        }
+        function PolicyIssu(Path) {
+           
+            var viewportwidth;
+            var viewportheight;
+            if (typeof window.innerWidth != 'undefined') {
+                viewportwidth = window.innerWidth;
+                viewportheight = window.innerHeight
+            }
+
+            else if (typeof document.documentElement != 'undefined'
+                    && typeof document.documentElement.clientWidth != 'undefined' && document.documentElement.clientWidth != 0) {
+                viewportwidth = document.documentElement.clientWidth;
+                viewportheight = document.documentElement.clientHeight
+            }
+            popup.SetSize(viewportwidth, viewportheight);
+            popup.SetContentUrl(Path);
+            popup.Show();
+        }
+        function SelectAndClosePopup() {
+            popup.Hide();
+            Msgpopup.Hide();
+            grid.Refresh();
+            
+        }
+        function OnCountryChanged(cmbCountry) {
+           
+            detailGrid.GetEditor("Accntnum").PerformCallback(cmbCountry.GetChecked());
+        }
+      
+    </script>
+    <div runat="server" id="MainFrame" >
+        <dx:ASPxCallback ID="ASPxCallback1" runat="server">
+        </dx:ASPxCallback>         
+        <table style="width:100%;">
+                                <tr>
+                                    <td style="right:auto" class="style1" dir="rtl">
+                                        التاريخ</td>
+                                    <td>
+                                        <dx:ASPxDateEdit ID="ASPxDateEdit1" runat="server"  ClientInstanceName="CurDate"
+                                             CssFilePath="~/App_Themes/DevEx/Editors/styles.css" CssPostfix="DevEx" Spacing="0" 
+                                            SpriteCssFilePath="~/App_Themes/DevEx/Editors/sprite.css" Theme="DevEx" 
+                                            >
+                                            <CalendarProperties>
+                                                <HeaderStyle Spacing="1px" />
+                                            </CalendarProperties>
+                                            <ClientSideEvents DateChanged="function(s, e) {	
+                                                    grid.PerformCallback(SysTxt.GetValue()); }"  />
+                                            <ButtonStyle Width="13px">
+                                            </ButtonStyle>
+                                        </dx:ASPxDateEdit>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td  class="style1" dir="rtl">
+                                        بحث</td>
+                                    <td>
+                                        <dx:ASPxComboBox ID="ASPxComboBox1" runat="server" EnableCallbackMode="true" OnItemsRequestedByFilterCondition="Search"
+                                            OnItemRequestedByValue="ASPxComboBox_OnItemRequestedByValue_SQL" IncrementalFilteringMode="Contains" 
+                                           CssFilePath="~/App_Themes/DevEx/{0}/sprite.css" CssPostfix="DevEx" Spacing="0" 
+                                            SpriteCssFilePath="~/App_Themes/DevEx/{0}/sprite.css" Width="100%" RightToLeft="True" Theme="DevEx">
+                                                <clientsideevents SelectedIndexChanged="function(s, e) { grid.Refresh(); }" />
+                                                <Columns>
+                                                    <dx:ListBoxColumn FieldName="PolNo" Width="80" />
+                                                    <dx:ListBoxColumn FieldName="CustName" Width="200" />
+                                                    <dx:ListBoxColumn FieldName="BudyNo" Width="60" />
+                                                    <dx:ListBoxColumn FieldName="TableNo" Width="80" />
+                                                </Columns>
+                                              <LoadingPanelImage Url="../App_Themes/DevEx/{0}/Loading.gif">
+                                            </LoadingPanelImage>
+                                            <LoadingPanelStyle ImageSpacing="5px">
+                                            </LoadingPanelStyle>
+                                            <ButtonStyle Width="13px">
+                                            </ButtonStyle>
+                                        </dx:ASPxComboBox>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table style="width:100%;">
+                                <tr>
+                                    <td class="style9">
+                                        <dx:ASPxMenu ID="ASPxMenu3" runat="server"
+                                            CssFilePath="~/App_Themes/DevEx/Web/styles.css" CssPostfix="DevEx" 
+                                            Font-Names="Tahoma" RightToLeft="True" ShowPopOutImages="True" 
+                                             SpriteCssFilePath="~/App_Themes/DevEx/Web/sprite.css">                                          
+                                            <ClientSideEvents ItemClick="function(s, e) {   
+                                                var Path;
+                                                var system=SysTxt.GetValue();
+                                                    if (system=='01'){ Path = '../PolicyManagement/MCMOTOR/IssuPolicy.aspx?sys=01';}
+                                                    if (system=='OR'){ Path = '../PolicyManagement/MCMOTOR/Orange.aspx?sys=OR';}
+                                                    if (system=='AT'){ Path = '../PolicyManagement/MCMOTOR/LibyaAssist.aspx?sys=AT';}
+                                                    if (system=='02'){ Path = '../PolicyManagement/MOMOTOR/Issu.aspx?sys=02';}
+                                                    if (system=='03'){ Path = '../PolicyManagement/MOMOTOR/Issu.aspx?sys=03';}
+                                                    if (system=='04'){ Path = '../PolicyManagement/CARGO/CARGO.aspx?sys=04';}
+                                                    if (system=='05'){ Path = '../PolicyManagement/CARGO/CARGO.aspx?sys=05';}
+                                                    if (system=='06'){ Path = '../PolicyManagement/CARGO/HullIssu.aspx?sys=06';}
+                                                    if (system=='08'){ Path = '../PolicyManagement/GeneralAccedent/BetSecret.aspx?sys=08';}
+                                                    if (system=='10'){ Path = '../PolicyManagement/GeneralAccedent/CashInSafe.aspx?sys=10';}
+                                                    if (system=='11'){ Path = '../PolicyManagement/GeneralAccedent/SevResponsibility.aspx?sys=11';}
+                                                    if (system=='12'){ Path = '../PolicyManagement/GeneralAccedent/Banking.aspx?sys=12';}
+                                                    if (system=='14'){ Path = '../PolicyManagement/GeneralAccedent/EngAcc.aspx?sys=14';}
+                                                    if (system=='13'){ Path = '../PolicyManagement/GeneralAccedent/CashInTransit.aspx?sys=13';}
+                                                    if (system=='15'){ Path = '../PolicyManagement/GeneralAccedent/EngAcc.aspx?sys=15';}
+                                                    if (system=='16'){ Path = '../PolicyManagement/GeneralAccedent/Machines.aspx?sys=16';}
+                                                    if (system=='18'){ Path = '../PolicyManagement/GeneralAccedent/JobResponsbility.aspx?sys=18';}
+                                                    if (system=='19'){ Path = '../PolicyManagement/GeneralAccedent/AllRisk.aspx?sys=19';}
+                                                    if (system=='21'){ Path = '../PolicyManagement/Burglary/Issu.aspx?sys=21';}
+                                                    if (system=='22'){ Path = '../PolicyManagement/Fire/Issu.aspx?sys=22';}
+                                                    if (system=='23'){ Path = '../PolicyManagement/Family/Issu.aspx?sys=23';}
+                                                    if (system=='26'){ Path = '../PolicyManagement/CARGO/Aviation.aspx?sys=26';}
+                                                    if (system=='27'){ Path = '../PolicyManagement/Life/TravelServ.aspx?sys=27';}
+                                                    if (system=='MD'){ Path = '../PolicyManagement/Life/Medical_Responspility.aspx?sys=MD';}
+                                                PolicyIssu(Path);                                  
+                                            }" />              
+                                            <Items>
+                                                <dx:MenuItem Text="وثيقة جديدة" Image-Url="~/Images/new.png">                           
+                                                 <Image Url="~/Images/new.png"></Image>
+                                                </dx:MenuItem>
+                                            </Items>
+                                             <LoadingPanelImage Url="../App_Themes/DevEx/{0}/Loading.gif">
+                                            </LoadingPanelImage>
+                                            <ItemSubMenuOffset FirstItemX="2" LastItemX="2" X="2" />
+                                            <ItemStyle DropDownButtonSpacing="10px" PopOutImageSpacing="10px" />
+                                            <LoadingPanelStyle ImageSpacing="5px">
+                                            </LoadingPanelStyle>
+                                            <SubMenuStyle GutterImageSpacing="9px" GutterWidth="3px" />
+                                        </dx:ASPxMenu>
+                                    </td>
+                                    <td class="style6">
+                                        <dx:ASPxTextBox ID="Sys"  ClientInstanceName="SysTxt" Text="0" runat="server" 
+                                            Height="1px" Visible="true" 
+                                            Width="1px" Enabled="true">
+                                            <Border BorderColor="White" BorderStyle="None" />
+                                        </dx:ASPxTextBox>
+                                        <dx:ASPxTextBox ID="Branch" ClientInstanceName="Branch" Text="0" runat="server" 
+                                            Height="1px" Visible="true" 
+                                            Width="1px" Enabled="true">
+                                            <Border BorderColor="White" BorderStyle="None" />
+                                        </dx:ASPxTextBox>
+                                    </td>
+                                    <td style="align-items:flex-start; text-align: justify;" dir="ltr">
+                                        <dx:ASPxMenu ID="ASPxMenu2" runat="server"
+                                            CssFilePath="../../App_Themes/DevEx/{0}/styles.css" CssPostfix="DevEx" 
+                                            Font-Names="Tahoma" RightToLeft="True" ShowPopOutImages="True" 
+                                            SpriteCssFilePath="../../App_Themes/DevEx/{0}/sprite.css">                                           
+                                            <ClientSideEvents ItemClick="function(s, e) {                                            
+                                                if (e.item.GetText()=='حافظة الأنتاج'){
+                                                    var d=CurDate.GetDate();var mm=d.getMonth()+1;
+                                                    ShowIssuClip('/TakafulyReports/IssuClip',SysTxt.GetValue(),Branch.GetValue(),d.getFullYear()+'/'+mm+'/'+d.getDate());
+                                                }
+                                                if (e.item.GetText()=='القيد المحاسبي'){
+                                                    var d=CurDate.GetDate();var mm=d.getMonth()+1;
+                                                    ShowIssuClip('/TakafulyReports/DailyJournal',SysTxt.GetValue(),Branch.GetValue(),d.getFullYear()+'/'+mm+'/'+d.getDate());
+                                                }
+                                                if (e.item.GetText()=='الإحصائية المجمعة'){
+                                                    var d=CurDate.GetDate();var mm=d.getMonth()+1;
+                                                    ShowIssuClip('/TakafulyReports/IssuStatistcs',SysTxt.GetValue(),Branch.GetValue(),d.getFullYear()+'/'+mm+'/'+d.getDate());
+                                                }
+                                                if (e.item.GetText()=='الإحصائية المفصلة'){
+                                                    var d=CurDate.GetDate();var mm=d.getMonth()+1;
+                                                    ShowIssuClip('/TakafulyReports/Details',SysTxt.GetValue(),Branch.GetValue(),d.getFullYear()+'/'+mm+'/'+d.getDate());
+                                                }
+                                            }" />              
+                                            <Items>
+                                                <dx:menuItem Text="التقارير" Image-Url="~/Images/Rep.png">
+                            
+                                                    <Items>
+                                                        <dx:menuItem   Text="حافظة الأنتاج">
+                                                        </dx:menuItem>
+                                                        <dx:menuItem Text="القيد المحاسبي">
+                                                        </dx:menuItem>
+                                                        <dx:menuItem Text="الإحصائية المجمعة">
+                                                        </dx:menuItem>
+                                                        <dx:menuItem Text="الإحصائية المفصلة">
+                                                        </dx:menuItem>
+                                                    </Items>
+
+                                                <Image Url="~/Images/Rep.png"></Image>
+                                                </dx:menuItem>
+                                            </Items>
+                                            <LoadingPanelImage Url="../../App_Themes/DevEx/Web/Loading.gif">
+                                            </LoadingPanelImage>
+                                            <ItemSubMenuOffset FirstItemX="2" LastItemX="2" X="2" />
+                                            <ItemStyle DropDownButtonSpacing="10px" PopOutImageSpacing="10px" />
+                                            <LoadingPanelStyle ImageSpacing="5px">
+                                            </LoadingPanelStyle>
+                                            <SubMenuStyle GutterImageSpacing="9px" GutterWidth="3px" />
+                                        </dx:ASPxMenu>
+                                       
+                                    </td>
+                                </tr>
+                            </table>
+                            <dx:ASPxGridView  ID="ASPxGridView1" ClientInstanceName="grid" runat="server" AutoGenerateColumns="False" Font-Names="tahoma" Font-Size="9pt"
+                                CssFilePath="~/App_Themes/DevEx/{0}/styles.css" CssPostfix="DevEx" SettingsCustomizationWindow-Height="100%" KeyFieldName="BranchName"
+                                Width="100%" DataSourceID="SqlDataSource1" RightToLeft="True" OnHtmlDataCellPrepared="grid_HtmlRowPrepared"
+                                OnHtmlRowPrepared="RowPrepare" Theme="BlackGlass">
+                                <ClientSideEvents Init="OnInit" EndCallback="OnEndCallback" />
+                                <Settings ShowVerticalScrollBar="true" ShowFooter="true" VerticalScrollBarStyle="Virtual" />
+                                <ClientSideEvents RowClick="function(s, e) {
+                                 
+                                                    if (rowVisibleIndex=='توزيع الحادث'){
+                                                        s.GetRowValues(e.visibleIndex, 'PolPath', GetPickUpPoints);
+                                                    }
+                                                    if (rowVisibleIndex=='تحرير الوثيقة'){
+                                                        s.GetRowValues(e.visibleIndex, 'Pol', GetPickUpPoints);
+                                                    }
+                                                    if (rowVisibleIndex=='إصدار وثيقة'){
+                                                        s.GetRowValues(e.visibleIndex, 'PolPath', GetPickUpPoints);
+                                                    }
+                                                    if (rowVisibleIndex=='الغاء الطلب'){
+                                                        s.GetRowValues(e.visibleIndex, 'Pol', GetPickUpPoints);
+                                                    }
+                                                    if (rowVisibleIndex=='أمر توريد'){
+                                                        s.GetRowValues(e.visibleIndex, 'Pol', GetPickUpPoints);
+                                                    }
+                                                 }" />
+                                <TotalSummary   >
+                                 <dx:ASPxSummaryItem ValueDisplayFormat="###,#0.000"   FieldName="net" SummaryType="Sum" />
+                                 <dx:ASPxSummaryItem ValueDisplayFormat="###,#0.000"   FieldName="value" SummaryType="Sum" />
+                                </TotalSummary>
+		                <GroupSummary>
+                                 <dx:ASPxSummaryItem ValueDisplayFormat="###,#0.000"   FieldName="net" SummaryType="Sum" />
+                                 <dx:ASPxSummaryItem ValueDisplayFormat="###,#0.000"   FieldName="value" SummaryType="Sum" />
+		                </GroupSummary>
+                                <Columns>
+                                    <dx:GridViewCommandColumn ShowSelectCheckbox="True" VisibleIndex="0" ></dx:GridViewCommandColumn>             
+                                <dx:gridViewDataHyperLinkColumn CellStyle-HorizontalAlign="Center" Width="30" VisibleIndex="1"  CellStyle-Wrap="false" 
+                                        EditFormSettings-Visible="False" Caption="" 
+                                   FieldName="Pol" ReadOnly="True" >
+                                    <PropertiesHyperLinkEdit  ImageUrl="~/Images/Printer.png" NavigateUrlFormatString="javascript:rowVisibleIndex='';ShowScanPopup('{0}',1);"
+                                        Text="Show Orders">
+                                    </PropertiesHyperLinkEdit>
+                                    <EditFormSettings Visible="False"></EditFormSettings>
+
+<CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
+                                </dx:gridViewDataHyperLinkColumn>
+                                <dx:gridViewDataColumn FieldName="CustName" Width="150" Caption="المؤمن له" VisibleIndex="2" CellStyle-Wrap="true"  >
+<CellStyle Wrap="True"></CellStyle>
+                                </dx:gridViewDataColumn>
+                                <dx:gridViewDataColumn FieldName="OrderNo" Visible="false" VisibleIndex="3" Caption="رقم الطلب" CellStyle-Font-Size="8" CellStyle-Wrap="false" >
+<CellStyle Wrap="False"></CellStyle>
+                                </dx:gridViewDataColumn>
+                                <dx:gridViewDataDateColumn FieldName="ClmSysDate" Visible="false" VisibleIndex="4" Caption="ت.الإدخال" Width="70"  CellStyle-Wrap="true" >
+<CellStyle Wrap="False"></CellStyle>
+                                </dx:gridViewDataDateColumn>
+                                <dx:gridViewDataColumn FieldName="CLM" CellStyle-Wrap="false" Caption="رقم الحادث" VisibleIndex="5"  Width="170">
+<CellStyle Wrap="False"></CellStyle>
+                                </dx:gridViewDataColumn>
+                                <dx:gridViewDataColumn FieldName="EndNo" CellStyle-Wrap="true" Caption="ملحق" Width="35" VisibleIndex="6" >
+<CellStyle Wrap="False"></CellStyle>
+                                </dx:gridViewDataColumn>
+                                <dx:gridViewDataDateColumn FieldName="LoadNo" CellStyle-Wrap="true" Caption="إشعار" Width="35" VisibleIndex="7" >
+<CellStyle Wrap="False"></CellStyle>
+                                </dx:gridViewDataDateColumn>
+                                <dx:gridViewDataColumn FieldName="DT"  CellStyle-Wrap="true" Width="80" Caption="ت. فتح الحادث" VisibleIndex="8" UnboundType="DateTime" >
+<CellStyle Wrap="False"></CellStyle>
+                                </dx:gridViewDataColumn>
+                                <dx:gridViewDataColumn FieldName="value"  CellStyle-Wrap="true" Width="150" Caption="الاحتياطي / صافي التعويض"  VisibleIndex="9"  >
+                                    <CellStyle  Wrap="False"></CellStyle>
+                                    </dx:gridViewDataColumn>
+                                <dx:gridViewDataColumn FieldName="net"  CellStyle-Wrap="true" Width="150" Caption="الاحتياطي/ إجمالي التعويض "  VisibleIndex="10"  >
+                                    <CellStyle  Wrap="False"></CellStyle>
+
+                                    </dx:gridViewDataColumn>
+                               <dx:gridViewDataColumn FieldName="STATE"  CellStyle-Wrap="true"  Caption="الحالة"  VisibleIndex="11"  >
+                                    <CellStyle  Wrap="False"></CellStyle>
+                                    </dx:gridViewDataColumn>
+                                <dx:gridViewDataColumn FieldName="BranchName" CellStyle-Wrap="true" Caption="الفرع" VisibleIndex="12" >
+<CellStyle Wrap="False"></CellStyle>
+                                </dx:gridViewDataColumn>
+                               
+<dx:GridViewDataColumn FieldName="PolPath"  ToolTip="menu" Caption="إجراءات" VisibleIndex="13" >
+<DataItemTemplate>
+<dx:aspxmenu runat="server"  ID="CMenu"  EnableCallBacks="true"  OnInit="Initiate_Menu" CssFilePath="~/App_Themes/DevEx/{0}/styles.css" CssPostfix="DevEx" RightToLeft="True" 
+                                ShowPopOutImages="True" SpriteCssFilePath="~/App_Themes/DevEx/{0}/sprite.css">
+                                                                <ClientSideEvents ItemMouseOver="function(s, e) { 
+                                                                 
+                                                                rowVisibleIndex=e.item.GetText();
+                                                }" />
+
+<Items>
+<dx:MenuItem Text="إجراءات"  ItemStyle-Font-Names="tahoma" ItemStyle-Font-Size="8" Image-Url="~/Images/Special.png" >
+ <Items >
+ <dx:MenuItem ItemStyle-Font-Names="tahoma" ItemStyle-Font-Size="8" Text="مبدئي" ></dx:MenuItem>
+ </Items>
+</dx:MenuItem>
+</Items>
+    <LoadingPanelImage Url="~/App_Themes/DevEx/Web/Loading.gif">
+    </LoadingPanelImage>
+    <ItemSubMenuOffset FirstItemX="2" LastItemX="2" X="2" />
+    <ItemStyle DropDownButtonSpacing="10px" PopOutImageSpacing="10px" />
+    <LoadingPanelStyle ImageSpacing="5px">
+    </LoadingPanelStyle>
+    <SubMenuStyle GutterImageSpacing="9px" GutterWidth="3px" />
+</dx:aspxmenu>
+</DataItemTemplate>
+</dx:GridViewDataColumn>
+                                </Columns>
+		                <SettingsPager PageSize="2000"/>
+                                <Settings ShowFilterRow="True" />
+
+<SettingsCustomizationWindow Height="100%"></SettingsCustomizationWindow>
+
+                                <SettingsDetail ShowDetailRow="true" />
+                                <Images SpriteCssFilePath="../App_Themes/DevEx/Web/sprite.css">
+                                    <LoadingPanelOnStatusBar Url="~/app_themes/DevEx/Web/Loading.gif">
+                                    </LoadingPanelOnStatusBar>
+                                    <LoadingPanel Url="../App_Themes/DevEx/Web/Loading.gif">
+                                    </LoadingPanel>
+                                </Images>
+                                <ImagesFilterControl>
+                                    <LoadingPanel Url="../App_Themes/DevEx/Web/Loading.gif">
+                                    </LoadingPanel>
+                                </ImagesFilterControl>
+                                <Styles CssFilePath="~/app_themes/DevEx/Web/styles.css" CssPostfix="DevEx">
+                                    <Header ImageSpacing="5px" SortingImageSpacing="5px">
+                                    </Header>
+                                    <LoadingPanel ImageSpacing="5px">
+                                    </LoadingPanel>
+                                </Styles>
+                                <StylesEditors ButtonEditCellSpacing="0">
+                                    <ProgressBar Height="21px" HorizontalAlign="Right">
+                                    </ProgressBar>
+                                </StylesEditors>
+                            </dx:ASPxGridView>
+    </div>
+    <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
+        ConnectionString="<%$ ConnectionStrings:IMSDBConnectionString %>" 
+        ProviderName="System.Data.SqlClient"        
+        SelectCommand="select MainClaimFile.ClmNo, mainclaimfile.PolNo, mainclaimfile.Status,(SELECT Max(v) 
+   FROM (VALUES (MainClaimFile.ClmDate),(Estimation.date),(esal.esd)) AS value(v)) as DT
+, Estimation.value, Sn, MainClaimFile.Branch,branchinfo.BranchName,esal.net,esal.esd,Estimation.date,MainClaimFile.ClmSysDate,esal.disd,
+        isnull(NetPrm.PolNo,rtrim(PolicyFile.polno)+'-'+rtrim(mainclaimfile.clmno)) AS CLM, MainClaimFile.EndNo, MainClaimFile.LoadNo,
+rtrim(substring(NetPrm.PolNo,15,len(rtrim(NetPrm.polno)))),CustomerFile.CustName,
+CASE WHEN EXISTS (
+    SELECT PolNo
+    FROM NetPrm
+    WHERE (PolNo = rtrim(Estimation.polno) + '-' + rtrim(Estimation.clmno) and round(Estimation.value,3)=round(Net,3)))
+THEN CAST(1 AS BIT)
+ELSE CAST(0 AS BIT)
+ END as Outstanding,
+ CASE WHEN EXISTS (
+    SELECT PolNo
+    FROM NetPrm
+     WHERE (substring(NetPrm.PolNo,15,len(rtrim(NetPrm.polno)))) = rtrim(esal.clmno) and NetPrm.Total<>-1 and  esal.branch=NetPrm.Br)
+THEN CAST(1 AS BIT)
+ELSE CAST(0 AS BIT)
+ END as Payed,
+ case when  esal.net is not NULL 
+ then
+ 'سداد'
+ else
+ 'تقدير احتياطي'
+ END as STATE,
+RTRIM(MainClaimFile.ClmNo) + '&EndNo=' + LTRIM(MainClaimFile.EndNo) + '&LoadNo=' + LTRIM(MainClaimFile.LoadNo) 
+                         + '&OrderNo=' + rtrim(PolicyFile.OrderNo) + '&Sys=' + PolicyFile.SubIns + '&Branch=' + PolicyFile.Branch AS Pol,
+RTRIM(MainClaimFile.ClmNo) + '&EndNo=' + LTRIM(MainClaimFile.EndNo) 
+                         + '&LoadNo=' + LTRIM(MainClaimFile.LoadNo) + '&OrderNo=' + rtrim(PolicyFile.OrderNo) + '&Sys=' + PolicyFile.SubIns + '&Branch=' + PolicyFile.Branch + '&PolNo=' + PolicyFile.PolNo  AS PolPath
+ from MainClaimFile left outer join Estimation on MainClaimFile.ClmNo=Estimation.clmno and MainClaimFile.PolNo=Estimation.polno
+ left outer join esal on MainClaimFile.clmno=esal.clmno and MainClaimFile.Branch=esal.branch left outer join NetPrm on 
+ NetPrm.PolNo = rtrim(MainClaimFile.PolNo) + '-' + rtrim(MainClaimFile.ClmNo) and round(Estimation.value,3)=round(netprm.Net,3) left outer join policyfile
+ on MainClaimFile.PolNo=PolicyFile.PolNo and MainClaimFile.EndNo=PolicyFile.EndNo left outer join CustomerFile on CustomerFile.CustNo=policyfile.CustNo left outer join BranchInfo on mainclaimfile.Branch=BranchInfo.BranchNo
+ where (YEAR(mainclaimfile.ClmSysDate) =YEAR(@ViewDate) or YEAR(Estimation.date) =YEAR(@ViewDate) or YEAR(esal.disd) =YEAR(@ViewDate)) and mainclaimfile.subins=@SubIns 
+ order by net,DT desc" >
+        <SelectParameters>
+          <asp:Parameter Name="SubIns" Type="String" />   
+          <asp:ControlParameter Name="ViewDate" ControlID="ASPxDateEdit1"/>
+       </SelectParameters>
+    </asp:SqlDataSource>
+    <asp:SqlDataSource ID="SqlDataSource2" runat="server" 
+        ConnectionString="<%$ ConnectionStrings:IMSDBConnectionString %>" 
+        ProviderName="System.Data.SqlClient">
+    </asp:SqlDataSource>
+            <dx:ASPxPopupControl ID="ASPxPopupControl2" runat="server" ClientInstanceName="popup" RightToLeft="True" 
+                                PopupVerticalAlign="WindowCenter"  
+        PopupHorizontalAlign="WindowCenter" >
+            <ContentCollection>
+                
+                <dx:PopupControlContentControl ID="PopupControlContentControl1" 
+        runat="server">
+                </dx:PopupControlContentControl>
+            </ContentCollection>
+       <ClientSideEvents Closing="function(s, e) {
+	s.PerformCallback();
+}" />
+    </dx:ASPxPopupControl>
+            <dx:ASPxPopupControl ID="ASPxPopupControl3" runat="server" ClientInstanceName="Msgpopup" RightToLeft="True" 
+                                PopupVerticalAlign="WindowCenter" Modal="true"
+        PopupHorizontalAlign="WindowCenter" >
+            <ContentCollection>
+                
+                <dx:popupControlContentControl ID="PopupControlContentControl2" 
+        runat="server">
+                </dx:popupControlContentControl>
+            </ContentCollection>
+       <ClientSideEvents Closing="function(s, e) {
+	s.PerformCallback();
+}" />
+        <FooterStyle BackColor="#FFFBBA">
+            <Border BorderWidth="0px" />
+        </FooterStyle>
+        <Border BorderColor="#BAAE6D" BorderStyle="Solid" BorderWidth="1px" />
+        <CloseButtonImage Height="15px" Url="~/Images/pcClose.gif" Width="15px" />
+        <HeaderStyle BackColor="#FCFADD" Font-Bold="True" ForeColor="#9E8A4F" Font-Size="9pt">
+            <Border BorderWidth="0px" />
+            <BorderBottom BorderWidth="1px" BorderColor="#DCD9B0" BorderStyle="Solid" />
+            <Paddings PaddingBottom="6px" PaddingLeft="13px" PaddingRight="8px" PaddingTop="6px" />
+        </HeaderStyle>
+        <ContentStyle BackColor="#FFFBBA" ForeColor="#9E8A4F">
+            <Border BorderWidth="0px" />
+            <Paddings PaddingBottom="10px" PaddingLeft="13px" PaddingRight="13px" PaddingTop="9px" />
+        </ContentStyle>
+        <CloseButtonStyle>
+            <Paddings Padding="0px" PaddingLeft="3px" />
+        </CloseButtonStyle>
+    </dx:ASPxPopupControl>
+	</asp:Content>
+<asp:Content  ID="Content2" ContentPlaceHolderID="NAV" Runat="Server" >
+    <dx:ASPxNavBar ID="ASPxNavBar1" runat="server" Theme="PlasticBlue"  AutoCollapse="True">
+    </dx:ASPxNavBar>
+    <asp:SiteMapDataSource  ID="SiteMapDataSource1"   ShowStartingNode="false" StartingNodeUrl="~/PolicyManagement/Default.aspx" Runat="server" />
+</asp:Content>
+    
+
+

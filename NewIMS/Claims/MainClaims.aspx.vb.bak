@@ -1,0 +1,137 @@
+﻿Imports DevExpress.Web
+
+Partial Class ClaimsManage_MainClaims
+    Inherits System.Web.UI.Page
+    Dim DataRet As New DataView
+    Dim Lo() As String
+
+    Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
+        Lo = Me.Session("LogInfo")
+        If IsNothing(Lo) Then
+            Me.ClientScript.RegisterStartupScript(Me.GetType, "Msg", "alert('لم يتم تسجيل الدخول');", True)
+            Response.Write("<script> window.open('../SystemManag/LogIn.aspx?Parent=" & Me.Page.AppRelativeVirtualPath & "','_self'); </script>")
+        Else
+            Dim Tr As TreeView = Nothing
+            ' Tr = Session("Tree")
+            'Call SetUserPerm(Tr, Lo, 2)
+            Call SetUserPermNAV(ASPxNavBar1, Lo, 2)
+            'Dim Lbl1 As Label = Master.Master.FindControl("BannerTitle")
+            'Lbl1.Text = Lo(0) & " at " & Format(Now, "hh:mm:ss") & " فرع " & GetBranchName(Lo(7))
+            'Dim MenuTable As Table = Master.Master.FindControl("Table1")
+            'MenuTable.BackImageUrl = "~/images/GlossyRed.png"
+            'Session("Branch") = Lo(7)
+        End If
+
+        If Not IsPostBack And Not IsNothing(Lo) Then
+            If DatePart("q", Today.Date) = 1 Then
+                'Sys.Text = "Q4"
+                'Years.Text = Year(Today.Date) - 1
+            Else
+                'Sys.Text = "Q" + CStr(DatePart("q", Today.Date) - 1)
+                'Years.Value = Year(Today.Date)
+            End If
+        End If
+
+        MainGrid.DataBind()
+    End Sub
+    Protected Sub chkSingleExpanded_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs)
+        MainGrid.SettingsDetail.AllowOnlyOneMasterRowExpanded = chkSingleExpanded.Checked
+        If MainGrid.SettingsDetail.AllowOnlyOneMasterRowExpanded Then
+            MainGrid.DetailRows.CollapseAllRows()
+        End If
+        MainGrid.DataBind()
+    End Sub
+    'Protected Sub Years_SelectedIndexChanged(sender As Object, e As EventArgs)
+    '    'Session("Year") = Years.Text()
+    '    MainGrid.DataBind()
+    'End Sub
+
+    Protected Sub Quarters_SelectedIndexChanged(sender As Object, e As EventArgs)
+        'Session("Q") = Quarters.Value()
+    End Sub
+    Protected Sub keyFieldLink_Init(ByVal sender As Object, ByVal e As EventArgs)
+        Dim link As ASPxHyperLink = TryCast(sender, ASPxHyperLink)
+        Dim container As GridViewDataItemTemplateContainer = TryCast(link.NamingContainer, GridViewDataItemTemplateContainer)
+        link.Text = "Print Slip Of " & container.KeyValue
+        link.Target = "_blank"
+        Select Case container.KeyValue
+            Case "Fire", "General Accident"
+                link.NavigateUrl = "~/OutPutManagement/PreView.aspx?Report=/TakafulyReports/SoaCC"
+            Case Else
+                link.NavigateUrl = "~/OutPutManagement/PreView.aspx?Report=/TakafulyReports/SoaUW"
+        End Select
+        'link.NavigateUrl = "Default2.aspx?id=" & container.KeyValue
+    End Sub
+    Protected Sub Initiate_Menu(ByVal sender As Object, ByVal e As EventArgs)
+        Dim ClaimsMenu As ASPxMenu = CType(sender, ASPxMenu)
+        ClaimsMenu.Items(0).Items.Clear()
+    End Sub
+    Protected Sub grid_HtmlRowPrepared(ByVal sender As Object, ByVal e As ASPxGridViewTableDataCellEventArgs)
+        'If (e.DataColumn.FieldName = "TOTPRM") Then
+        '    If e.GetValue("TOTPRM") <> e.GetValue("InBox") Then
+        '        e.Cell.ForeColor = Drawing.Color.Red
+        '    Else
+        '        e.Cell.ForeColor = Drawing.Color.Green
+        '    End If
+        '    Dim PolicyRow As DevExpress.Web.ASPxGridView.Rendering.GridViewTableDataRow = e.Cell.Parent
+        'End If
+        'If (e.DataColumn.FieldName = "NETPRM") Then
+        '    If e.GetValue("Financed") = 0 Then
+        '        e.Cell.BackColor = Drawing.Color.Orange
+        '    End If
+        'End If
+        If (e.DataColumn.FieldName = "") Then
+            Dim ClaimsMenu As ASPxMenu = (TryCast(sender, ASPxGridView)).FindRowCellTemplateControl(e.VisibleIndex, e.DataColumn, "ClmMenu")
+            'If IsDBNull(e.GetValue("IssuDate")) Then
+            'If IsDBNull(e.GetValue("IssuDate")) Then
+            ClaimsMenu.Items(0).Items.Add("تقدير احتياطي")
+            ClaimsMenu.Items(0).Items.Add("تسوية")
+            ClaimsMenu.Items(0).Items.Add("سداد")
+            'ClaimsMenu.Items(0).Items.Add("معاينة")
+            'Else
+            'ClaimsMenu.Items(0).Items.Add("تحرير الوثيقة")
+            '        ClaimsMenu.Items(0).Items.Add("عمليات خاصة")
+            '        ClaimsMenu.Items(0).Items.Add("توزيع الوثيقة")
+            'End If
+            'End If
+        End If
+    End Sub
+    Protected Sub detailGrid_DataSelect(ByVal sender As Object, ByVal e As EventArgs)
+        Session("ClmNo") = (TryCast(sender, ASPxGridView)).GetMasterRowKeyValue()
+    End Sub
+
+    Protected Sub MainGrid_HtmlRowPrepared(sender As Object, e As ASPxGridViewTableDataCellEventArgs)
+        MainGrid.GetRowValues(4, "Status")
+        If (e.DataColumn.FieldName = "Status") Then 'And Not IsDBNull(e.GetValue("net")
+            If e.GetValue("Status") <> 0 Then
+                e.Cell.BackColor = Drawing.Color.OrangeRed
+            End If
+        End If
+        'If (e.DataColumn.FieldName = "value") Then
+        '    If e.GetValue("Outstanding") = 0 Then
+        '        e.Cell.BackColor = Drawing.Color.OrangeRed
+        '    End If
+        'End If
+        If (e.DataColumn.FieldName = "") Then
+            Dim MClaimsMenu As ASPxMenu = MainGrid.FindRowCellTemplateControl(e.VisibleIndex, e.DataColumn, "MClmMenu")
+            'If IsDBNull(e.GetValue("IssuDate")) Then
+            'If IsDBNull(e.GetValue("IssuDate")) Then
+            MClaimsMenu.Items(0).Items.Add("إقفال")
+            MClaimsMenu.Items(0).Items.Add("معاينة")
+            If Sys.Text <> "01" And Sys.Text <> "02" And Sys.Text <> "03" And Sys.Text <> "MD" And Sys.Text <> "OR" Then
+                MClaimsMenu.Items(0).Items.Add("توزيع")
+            End If
+            'MClaimsMenu.Items(0).Items.FindByText("إقفال").NavigateUrl = "~/ClaimsManage/close/CloseClmFile.aspx?ClmNo=" + MainGrid.GetRowValues(1, "ClmNo") + "&Sys=" + Sys.Text + ""
+            'Else
+            'ClaimsMenu.Items(0).Items.Add("تحرير الوثيقة")
+            '        ClaimsMenu.Items(0).Items.Add("عمليات خاصة")
+            '        ClaimsMenu.Items(0).Items.Add("توزيع الوثيقة")
+            'End If
+            'End If
+        End If
+    End Sub
+
+    Private Sub MainGrid_CustomUnboundColumnData(sender As Object, e As ASPxGridViewColumnDataEventArgs) Handles MainGrid.CustomUnboundColumnData
+
+    End Sub
+End Class

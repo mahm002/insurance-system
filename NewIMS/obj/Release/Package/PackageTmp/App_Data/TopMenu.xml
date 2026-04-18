@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<items>
+	<item Text="إدارة الإصدارات" NavigateUrl="~/Policy/" visible="false" />
+	<item Text="إدارة المطالبات" NavigateUrl="~/Claims/" />
+	<item Text="الحسابات" NavigateUrl="~/Finance/" />
+	<item Text="الإعادة" NavigateUrl="~/Reins/" />
+	<item Text="الأنظمة الإدارية" NavigateUrl="#" />
+	<item Text="إدارة النظام" NavigateUrl="~/SystemManage/" />
+	<!--<item Text="" ToolTip ="تسجيل الخروج"  NavigateUrl="~/SystemManage/LogIn.aspx?CMD=logoff" />-->
+</items>

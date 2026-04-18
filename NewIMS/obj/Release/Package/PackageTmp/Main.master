@@ -1,0 +1,56 @@
+<%@ Master Language="VB" MasterPageFile="~/Root.master" AutoEventWireup="true" CodeBehind="Main.master.vb" Inherits="MainMaster" %>
+
+<%-- DXCOMMENT: Page Main.master is a master page that contains central area layout --%>
+
+<asp:Content ID="Content2" ContentPlaceHolderID="Content" runat="server">
+    <script type="text/javascript">
+
+        document.addEventListener("contextmenu", function (e) {
+            e.preventDefault();
+        }, false);
+    </script>
+    <dx:aspxpanel id="RightPane" runat="server" fixedposition="WindowRight" clientinstancename="rightPane" cssclass="rightPane" collapsible="true" scrollbars="Auto">
+        <settingsadaptivity collapseatwindowinnerwidth="1023" />
+        <styles>
+            <panel cssclass="panel"></panel>
+        </styles>
+        <panelcollection>
+            <dx:panelcontent runat="server">
+                <dx:aspxnavbar id="SideBar" runat="server" enableanimation="True" width="100%"
+                    itemstyle-wrap="True"
+                    allowexpanding="true"
+                    showexpandbuttons="true"
+                    autocollapse="true"
+                    allowselectitem="true"
+                    viewstatemode="Enabled">
+                    <border borderwidth="0px" />
+                    <paddings padding="0px" />
+                </dx:aspxnavbar>
+            </dx:panelcontent>
+        </panelcollection>
+    </dx:aspxpanel>
+
+    <div class="contentPane" style="width: 100%; height: 100%; padding: 0; margin: 0; vertical-align: top; margin-top: 15px;">
+        <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+    </div>
+</asp:Content>
+<%--    <asp:XmlDataSource ID="XmlDataSourceLeft" runat="server" DataFile="~/App_Data/SideMenu.xml"
+        XPath="/menu/*"></asp:XmlDataSource>--%>
+
+<%--<dx:ASPxPanel ID="RightPane" runat="server" FixedPosition="WindowRight" ClientInstanceName="rightPane" CssClass="rightPane" Collapsible="true">
+            <SettingsAdaptivity CollapseAtWindowInnerWidth="1023" />
+            <Styles>
+                <Panel CssClass="panel"></Panel>
+            </Styles>
+            <PanelCollection>
+                <dx:PanelContent runat="server">
+                    <%-- DXCOMMENT: Configure the right panel's ASPxNavBar --%>
+<%--                    <dx:ASPxNavBar ID="SideBar" runat="server" AutoCollapse="True" EnableAnimation="True" Width="100%" ClientInstanceName="SB">
+
+                        <Border BorderWidth="0px" />
+                    </dx:ASPxNavBar>--%>
+<%--  <dx:ASPxNavBar ID="SideBar" ClientInstanceName="SideBar" runat="server">
+                    </dx:ASPxNavBar>
+                </dx:PanelContent>
+            </PanelCollection>
+        </dx:ASPxPanel>--%>

@@ -1,0 +1,261 @@
+/* DEPRECATED -- The style for the combo box container */
+.ComboBox
+{}
+/* Defines the text box. */
+.ComboBoxText
+{
+	border-left:1px solid #7F9DB9;
+	border-top:1px solid #7F9DB9;
+	border-bottom:1px solid #7F9DB9;
+	border-right:1px solid #7F9DB9;
+	background:url("icon.gif") no-repeat left top;
+	height:22;
+	font:10pt Tahoma,Verdana,Tahoma;
+	vertical-align:text-bottom;
+	padding-top: 2px;
+	padding-left: 22px;
+}
+.ComboBoxTextDisabled
+{
+	border-left:1px solid #7F9DB9;
+	border-top:1px solid #7F9DB9;
+	border-bottom:1px solid #7F9DB9;
+	border-right:1px solid #7F9DB9;
+	background:url("icon.gif") no-repeat left top;
+	height:22;
+	font:10pt Tahoma,Verdana,Tahoma;
+	vertical-align:text-bottom;
+	padding-top: 2px;
+	padding-left: 22px;
+}
+.ComboBoxTextDynamic
+{
+}
+.ComboBoxTextDynamicOver
+{
+}
+/* DEPRECATED -- Defines the container containing the textbox and button */
+.ComboBoxTextAndButton
+{}
+/* Defines the button */
+.ComboBoxButton
+{
+	cursor:pointer;
+}
+/* Defines the button's IMG tag */
+.ComboBoxButtonImg
+{
+	background:url("button.gif");
+	vertical-align:text-bottom;
+	/* underscore-css-hack necessary because below are only needed for IE */
+	_position:relative;
+	_top:-1;
+	/* width/height necessary to size the transparent 1x1pixel gif to allow
+		the above background to show */
+	width:17;
+	height:22;
+}
+/* The class used when the user mouses over the button. */
+.ComboBoxButtonImgOver
+{
+	background:url("button_hl.gif");
+	vertical-align:text-bottom;
+	/* underscore-css-hack necessary because below are only needed for IE */
+	_position:relative;
+	_top:-1;
+	/* width/height necessary to size the transparent 1x1pixel gif to allow
+		the above background to show */
+	width:17;
+	height:22;
+}
+/* The class used when the combo is disabled. */
+.ComboBoxButtonImgDisabled
+{
+	background:url("button_hl.gif");
+	vertical-align:text-bottom;
+	/* underscore-css-hack necessary because below are only needed for IE */
+	_position:relative;
+	_top:-1;
+	/* width/height necessary to size the transparent 1x1pixel gif to allow
+		the above background to show */
+	width:17;
+	height:22;
+}
+/* The class used when the user presses the button. */
+.ComboBoxButtonImgPressed
+{
+	background:url("button.gif");
+	vertical-align:text-bottom;
+	/* underscore-css-hack necessary because below are only needed for IE */
+	_position:relative;
+	_top:-1;
+	/* width/height necessary to size the transparent 1x1pixel gif to allow
+		the above background to show */
+	width:17;
+	height:22;
+}
+/* The list container; contains the list's header, body, footer. */
+.ComboBoxList
+{
+	/*float:left;*/
+	border-right: silver 1px solid;
+	border-top: silver 1px solid;
+	border-left: silver 1px solid;
+	border-bottom: silver 1px solid;
+	background-color: white;
+	z-index: 1000;
+	visibility: hidden;
+	display: none;
+	position: absolute;
+	text-align: left;
+	scrollbar-face-color:#D5DFF9;
+	scrollbar-highlight-color:#FFFFFF;
+	scrollbar-3dlight-color:#EBEFF7;
+	scrollbar-darkshadow-color:#5D5A6D;
+	scrollbar-shadow-color:#4D6185;
+	scrollbar-arrow-color:#000000;
+	scrollbar-track-color:#F4F1EC;
+}
+.ComboBoxListIframe
+{
+	float:left;
+}
+/* The list's body; the middle container in the list container. */
+.ComboBoxListBody
+{
+	/* workaround to scrolling issue */
+	overflow:auto;
+	_overflow:hidden;
+	_overflow-y:auto;
+	background:#FFFFFF;
+	font:8pt Tahoma,Verdana,Tahoma;
+	background:#F9F9F9 url("listback.jpg") repeat right top;
+	background-attachment: fixed;
+	float:left;
+}
+/* The list's header; the topmost container in the list container. */
+.ComboBoxListHeader
+{
+	overflow:hidden;
+	background-color: #DEE2EB;
+	font:8pt Tahoma,Verdana,Tahoma;
+	color:#000000;
+	border-top:1px solid #FFFFFF;
+	border-bottom:1px solid #7F9DB9;
+	height:22;
+	float:left;
+}
+/* The table storing the actual list data */
+.ComboBoxListBodyTable
+{
+	font-size:10pt;
+	margin:0px;
+	border-collapse:collapse;
+	padding: 0px;
+	border-width:0px;
+	float:left;
+}
+/* A row in the table. */
+.ComboBoxListBodyTableRow
+{
+	font:10pt Tahoma,Verdana,Tahoma;
+	margin:0px;
+	border-collapse:collapse;
+	height:16px;
+	padding-top: 0px;
+	padding-left: 2px;
+	padding-bottom: 0px;
+	border:#F9F9F9 0px solid;
+	cursor:pointer;	
+	float:left;
+}
+/* The style used when the user selects or mouses over a row */
+.ComboBoxListBodyTableRowHighlighted
+{
+	font:10pt Tahoma,Verdana,Tahoma;
+	margin:0px;
+	padding-top: 0px;
+	padding-left: 2px;
+	padding-bottom: 0px;
+	border-collapse:collapse;
+	height:16px;	
+	color:#000;
+	background:#F6F6F6;
+	border:#B8CCE4 0px solid;
+	cursor:pointer;	
+	float:left;
+}
+/* The column labels at the top of the columns. This style is applied to the whole row of labels. */
+.ComboBoxColumnLabels
+{
+	font:10pt Tahoma,Verdana,Tahoma;
+	color:#000;
+	float:left;
+}
+/* The style applied to the individual label. */
+.ComboBoxColumnLabel
+{
+	font:10pt Tahoma,Verdana,Tahoma;
+	color:#000000;
+	padding-top: 1px;
+	padding-right: 0px;
+	padding-left: 2px;
+	vertical-align:top;
+	position:relative;
+	top:0px;
+	float:left;
+}
+/* The footer that sits underneath the list. */
+.ComboBoxListFooter
+{
+	font:10pt Tahoma,Verdana,Tahoma;
+	background-color: #DEE2EB;
+	vertical-align:middle;
+	border-top:1px solid #7F9DB9;
+	color: #000000;
+	height:20px;
+	padding:0px;
+	float:left;
+	overflow:hidden;
+}
+.ComboBoxListColumnDefinition
+{
+	_height:16px;
+	min-height:16px;
+	padding-left: 2px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;			
+	border-width:0px;
+	float:left;
+	cursor:pointer;	
+	overflow:visible;
+}
+.ComboBoxListFooterPageNextButton
+{
+	background:url("paging.gif") no-repeat right top;
+	height:20px;
+	border-top:1px solid #FFFFFF;
+	padding-left: 2px;
+	padding-top: 1px;
+	cursor:hand;
+	float:left;
+}
+.ComboBoxListFooterPageNextButtonHighlight
+{
+	background:#e9ebf4 url("paging.gif") no-repeat right top;
+	color: #000000;
+	border-top:1px solid #e9ebf4;
+	padding-left: 2px;
+	padding-top: 1px;
+	height:20px;
+	cursor:hand;
+	float:left;
+}
+/* affects the color of the list's outer border */
+/* PLEASE DO NOT put anything else into this style */
+/* this style is provided solely to change this one attribute */
+.ComboBoxListOuterBorder
+{
+      border-color:#7F9DB9;
+}

@@ -1,0 +1,50 @@
+﻿<%@ Page Language="vb" AutoEventWireup="false" CodeBehind="BranchesBoard.aspx.vb" Inherits="BranchesBoard" %>
+
+<%@ Register Assembly="DevExpress.XtraCharts.v21.2.Web, Version=21.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.XtraCharts.Web" TagPrefix="dx" %>
+<%@ Register Assembly="DevExpress.XtraCharts.v21.2, Version=21.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.XtraCharts" TagPrefix="dx" %>
+
+<%@ Register Assembly="DevExpress.Web.ASPxPivotGrid.v21.2, Version=21.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.Web.ASPxPivotGrid" TagPrefix="dx" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+
+            <asp:SqlDataSource ID="DBsource" runat="server" ConnectionString="<%$ ConnectionStrings:IMS-DBConnectionString %>"
+                SelectCommand="SELECT [IssuDate], [SubIns], [TOTPRM], [Branch], [Currency] FROM [PolicyFile]"></asp:SqlDataSource>
+            <dx:aspxpivotgridexporter id="ASPxPivotGridExporter1" runat="server" aspxpivotgridid="ASPxPivotGrid1">
+            </dx:aspxpivotgridexporter>
+            <dx:aspxpivotgrid id="ASPxPivotGrid1" runat="server" clientidmode="AutoID" datasourceid="DBsource" ismaterialdesign="False" optionsdata-dataprocessingengine="Optimized" width="100%">
+                <fields>
+                    <dx:pivotgridfield id="field" area="ColumnArea" areaindex="0" caption="لسنة" name="field">
+                        <databindingserializable>
+                            <dx:datasourcecolumnbinding columnname="IssuDate" groupinterval="DateYear" />
+                        </databindingserializable>
+                    </dx:pivotgridfield>
+                    <dx:pivotgridfield id="field1" area="RowArea" areaindex="0" caption="نوع التأمين" name="field1">
+                        <databindingserializable>
+                            <dx:datasourcecolumnbinding columnname="SubIns" />
+                        </databindingserializable>
+                    </dx:pivotgridfield>
+                    <dx:pivotgridfield id="field2" area="DataArea" areaindex="0" name="field2">
+                        <databindingserializable>
+                            <dx:datasourcecolumnbinding columnname="TOTPRM" />
+                        </databindingserializable>
+                    </dx:pivotgridfield>
+                    <dx:pivotgridfield id="field3" areaindex="0" caption="للفرع" name="field3">
+                        <databindingserializable>
+                            <dx:datasourcecolumnbinding columnname="Branch" />
+                        </databindingserializable>
+                    </dx:pivotgridfield>
+                </fields>
+                <optionsdata dataprocessingengine="Optimized"></optionsdata>
+            </dx:aspxpivotgrid>
+        </div>
+    </form>
+</body>
+</html>

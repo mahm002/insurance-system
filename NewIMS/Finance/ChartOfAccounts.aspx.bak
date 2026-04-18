@@ -1,0 +1,287 @@
+﻿<%@ Page Title="Chart Of Accounts" Language="vb" AutoEventWireup="false" ValidateRequest="false" MasterPageFile="~/Main.master" CodeBehind="ChartOfAccounts.aspx.vb" Inherits="ChartOfAccounts" %>
+
+<%@ Register Assembly="DevExpress.Web.ASPxTreeList.v21.2, Version=21.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.Web.ASPxTreeList" TagPrefix="dx" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+    <div>
+        <script>
+            function OnEndCallBack(s, e) {
+                // debugger;
+                //if (cpMyAttribute == 'PrintLedger') {
+                //alert(s.cpMyAttribute);
+                let hdr = s.cpResult
+                let mhdr = 'طباعة - '
+                popup.SetHeaderText(mhdr.concat(hdr));
+                popup.SetContentHtml(null);
+                popup.SetContentUrl(s.cpNewWindowUrl);
+
+                var width = Math.max(0, document.documentElement.clientWidth) * 0.9;
+                var height = Math.max(0, document.documentElement.clientHeight) * 0.8;
+                popup.SetWidth(width);
+                popup.SetSize(width, height);
+                popup.Show();
+                //}
+                s.cpMyAttribute = ''
+                s.cpNewWindowUrl = null
+            }
+
+            function CoaOnEndCallBack(s, e) {
+                //alert(s.cpMyAttribute);
+                if (s.cpNewWindowUrl != null && s.cpMyAttribute == 'PrintLedgerBulk') {
+                    //window.open(s.cpNewWindowUrl);
+                    //PrintPop.SetSize(1000, 800);
+                    let hdr = s.cpResult;
+                    let mhdr = 'طباعة - ';
+                    popup.SetHeaderText(mhdr.concat(hdr));
+                    popup.SetContentHtml(null);
+                    popup.SetContentUrl(s.cpNewWindowUrl);
+                    popup.SetSize(Math.max(0, document.documentElement.clientWidth) * 0.95, Math.max(0, document.documentElement.clientHeight) * 0.95);
+                    popup.Show();
+                }
+                else {
+                    //alert("لم يتم اختيار أي حسابات");
+                }
+                s.cpMyAttribute = ''
+                s.cpNewWindowUrl = null
+            }
+
+            function puOnInit(s, e) {
+                AdjustSize();
+                ASPxClientUtils.AttachEventToElement(window, "resize", function (evt) {
+                    AdjustSize();
+                    if (s.IsVisible())
+                        s.UpdatePosition();
+                });
+            }
+
+            function AdjustSize() {
+                var width = Math.max(0, document.documentElement.clientWidth) * 0.6;
+                var height = Math.max(0, document.documentElement.clientHeight) * 0.5;
+                popup.SetWidth(width);
+                popup.SetSize(width, height);
+            }
+            //function SelectAndClosePopup() {
+            //    popup.Hide();
+            //    coa.Refresh();
+            //    //AccMoveGrid.Refresh();
+            //}
+            function SelectAndClosePopup() {
+                popup.Hide();
+                coa.PerformCallback();
+                //AccMoveGrid.Refresh();
+            }
+            function OnToolbarItemClick(s, e) {
+                if (IsCustomExportToolbarCommand(e.item.name)) {
+                    e.processOnServer = true;
+                    //cb.PerformCallback();
+                }
+                }
+
+
+            function IsCustomExportToolbarCommand(command) {
+                //alert(command);
+                return command == "CustomLedger"
+                //|| command == "ExtraSearch";
+                //command == "CustomExportToXLS" || command == "CustomExportToXLSX" ||
+            }
+            //function performSearch() {
+            //    var searchTerm = txtSearch.GetText();
+            //    if (!searchTerm) return;
+
+            //    // Call server-side search method
+            //    PageMethods.SearchAccounts(searchTerm, function (results) {
+            //        coa.CollapseAll();
+            //        results.forEach(function (result) {
+            //            expandPath(result.Path.split('/'), 0);
+            //        });
+            //    });
+            //}
+
+            //function expandPath(pathSegments, index) {
+            //    if (index >= pathSegments.length) return;
+
+            //    var nodeKey = pathSegments[index];
+            //    var node = coa.FindNodeByKey(nodeKey);
+
+            //    if (!node) {
+            //        // If node not loaded, find its parent and expand
+            //        if (index === 0) {
+            //            // Root node
+            //            coa.ExpandNode(nodeKey);
+            //        } else {
+            //            var parentKey = pathSegments[index - 1];
+            //            var parentNode = coa.FindNodeByKey(parentKey);
+            //            if (parentNode && !parentNode.GetExpanded()) {
+            //                parentNode.SetExpanded(true, function () {
+            //                    expandPath(pathSegments, index);
+            //                });
+            //            }
+            //        }
+            //    } else {
+            //        node.SetExpanded(true, function () {
+            //            expandPath(pathSegments, index + 1);
+            //        });
+            //    }
+            //}
+        </script>
+
+        <dx:ASPxCallback ID="CBL" runat="server" ClientInstanceName="cb" OnCallback="CBL_Callback">
+            <ClientSideEvents EndCallback="OnEndCallBack" />
+        </dx:ASPxCallback>
+        
+        <dx:ASPxTextBox ID="txtSearch" runat="server" NullText="بحث ...." Width="200px">
+            
+        </dx:ASPxTextBox>
+        <dx:ASPxTreeList ID="COA" ClientInstanceName="coa" runat="server" 
+            AutoGenerateColumns="False"
+            DataSourceID="SqlDataSource1" Width="100%"
+            KeyFieldName="AccountNo" ParentFieldName="ParentAcc"
+            SettingsLoadingPanel-Mode="Disabled"
+            
+            Settings-ShowHeaderFilterListBoxSearchUI="true"
+            Settings-ShowColumnHeaders="false">
+            <ClientSideEvents EndCallback="CoaOnEndCallBack" 
+                ToolbarItemClick="OnToolbarItemClick" 
+                CustomButtonClick="function(s, e) {
+                //s.PerformCallback(e.buttonID + '|' + e.nodeKey);
+                //var acn = coa.GetSelectedNodeValues('ACCNTNAM')
+                //debugger;
+                   if (e.buttonID=='NewButton'){
+                    //alert(e.nodeKey);
+                 var width = Math.max(0, document.documentElement.clientWidth) * 0.7;
+                    var height = Math.max(0, document.documentElement.clientHeight) * 0.5;
+                    popup.SetWidth(width);
+                    popup.SetSize(width, height);
+                        popup.Show();
+                        popup.SetContentHtml(null);
+                        popup.SetHeaderText(' إضافة حساب فرعي جديد تحت حساب الأب رقم ' + e.nodeKey);
+                        popup.SetContentUrl('NewAccount.aspx?Parent=' + e.nodeKey + '&Mode=New');
+                                                }
+                   if (e.buttonID=='UpdateButton'){
+                    var width = Math.max(0, document.documentElement.clientWidth) * 0.7;
+                    var height = Math.max(0, document.documentElement.clientHeight) * 0.5;
+                    popup.SetWidth(width);
+                    popup.SetSize(width, height);
+                        popup.Show();
+                        popup.SetContentHtml(null);
+                        popup.SetHeaderText(' تعديل حساب ' + e.nodeKey);
+                        popup.SetContentUrl('UpdateAccount.aspx?AccountNo=' + e.nodeKey);
+                                                }
+                   if (e.buttonID=='DeleteButton'){
+                    var width = Math.max(0, document.documentElement.clientWidth) * 0.7;
+                    var height = Math.max(0, document.documentElement.clientHeight) * 0.5;
+                    popup.SetWidth(width);
+                    popup.SetSize(width, height);
+                        popup.Show();
+                        popup.SetContentHtml(null);
+                        popup.SetHeaderText(' شطب الحساب رقم ' + e.nodeKey);
+                        popup.SetContentUrl('DeleteAccount.aspx?AccountNo=' + e.nodeKey);
+                                                }
+                   if (e.buttonID=='LedgerButton'){
+                        cb.PerformCallback('Ledger'+ '|' + e.nodeKey);
+                        }
+               
+                }" />
+            <Columns>
+                <dx:TreeListTextColumn AutoFilterCondition="Default" FieldName="FullName" ShowInFilterControl="Default" VisibleIndex="0">
+                </dx:TreeListTextColumn>
+                <dx:TreeListTextColumn AutoFilterCondition="Default" FieldName="ParentAcc" ShowInFilterControl="Default" VisibleIndex="1" Visible="false">
+                </dx:TreeListTextColumn>
+                <dx:TreeListTextColumn AutoFilterCondition="Default" FieldName="FullPath" ShowInFilterControl="Default" VisibleIndex="2" Visible="false">
+                </dx:TreeListTextColumn>
+                <dx:TreeListTextColumn AutoFilterCondition="Default" FieldName="Level" ShowInFilterControl="Default" VisibleIndex="3" Visible="false">
+                </dx:TreeListTextColumn>
+                <dx:TreeListCommandColumn>
+                    <CustomButtons >
+                        <dx:TreeListCommandColumnCustomButton ID="NewButton" Text=" " Image-ToolTip="إضافة حساب جديد" >
+                            <Image IconID="actions_add_16x16office2013">
+                            </Image>
+                        </dx:TreeListCommandColumnCustomButton>
+                        <dx:TreeListCommandColumnCustomButton ID="UpdateButton" Text=" " Image-ToolTip="تعديل الحساب">
+                            <Image IconID="miscellaneous_design_16x16office2013">
+                            </Image>
+                        </dx:TreeListCommandColumnCustomButton>
+                        <dx:TreeListCommandColumnCustomButton ID="DeleteButton" Text=" " Image-ToolTip="شطب الحساب">
+                            <Image IconID="edit_delete_16x16office2013">
+                            </Image>
+                        </dx:TreeListCommandColumnCustomButton>
+                        <dx:TreeListCommandColumnCustomButton ID="LedgerButton" Text=" " Image-ToolTip="حساب الاستاذ">
+                            <Image IconID="actions_sortbyorderdate_16x16devav">
+                            </Image>
+                        </dx:TreeListCommandColumnCustomButton>
+                    </CustomButtons>
+                </dx:TreeListCommandColumn>
+            </Columns>
+
+            <Settings ShowColumnHeaders="False"></Settings>
+
+            <SettingsBehavior AllowFocusedNode="True" AutoExpandAllNodes="false" />
+
+            <SettingsText LoadingPanelText="تحميل..." ></SettingsText>
+
+            <SettingsSearchPanel Visible="true" CustomEditorID="txtSearch"/>
+            <SettingsCookies StoreExpandedNodes="false"  />
+            <SettingsBehavior AllowFocusedNode="True"></SettingsBehavior>
+             <SettingsPager Mode="ShowPager" PageSize="50"></SettingsPager>
+            <SettingsLoadingPanel Delay="0" />
+            <%--<Settings ShowLoadingPanel="True" />--%>
+            <SettingsEditing AllowNodeDragDrop="false" Mode="EditFormAndDisplayNode"  ConfirmDelete="true" />
+            <SettingsSelection  Recursive="true" Enabled="True" />
+
+            <%--<SettingsExport EnableClientSideExportAPI="True" ExpandAllNodes="true" />--%>
+            <Toolbars>
+                <dx:TreeListToolbar>
+                    <SettingsAdaptivity Enabled="true" EnableCollapseRootItemsToIcons="true" />
+                    <Items>
+                        <%--<dx:TreeListToolbarItem Command="ExportToPdf" />
+                        <dx:TreeListToolbarItem Command="ExportToXls" />
+                        <dx:TreeListToolbarItem Command="ExportToXlsx" />
+                        <dx:TreeListToolbarItem Command="ExportToDocx" />
+                        <dx:TreeListToolbarItem Command="ExportToRtf" />--%>
+                        <dx:TreeListToolbarItem Command="Custom" Text="كشف حساب" Name="CustomLedger" 
+                            Image-IconID="actions_sortbyorderdate_16x16devav" />
+                    </Items>
+                </dx:TreeListToolbar>
+            </Toolbars>
+       <%--     <SettingsPopup>
+                <FilterControl AutoUpdatePosition="False"></FilterControl>
+            </SettingsPopup>--%>
+        </dx:ASPxTreeList>
+        <asp:SqlDataSource ID="SqlDataSource1" runat="server"
+            ConflictDetection="CompareAllValues"
+            ConnectionString="<%$ ConnectionStrings:IMS-DBConnectionString %>"
+            DeleteCommand="DELETE FROM [Accounts] WHERE [AccountNo] = @original_AccountNo AND [AccountName] = @original_AccountName AND (([ParentAcc] = @original_ParentAcc) OR ([ParentAcc] IS NULL AND @original_ParentAcc IS NULL)) AND (([FullPath] = @original_FullPath) OR ([FullPath] IS NULL AND @original_FullPath IS NULL)) AND (([Level] = @original_Level) OR ([Level] IS NULL AND @original_Level IS NULL))"
+            InsertCommand="INSERT INTO [Accounts] ([AccountNo], [AccountName], [ParentAcc], [FullPath], [Level]) VALUES (@AccountNo, @AccountName, @ParentAcc, @FullPath, @Level)"
+            OldValuesParameterFormatString="original_{0}"
+            SelectCommand="SELECT [AccountNo], replace([AccountNo],'.','')+'-'+rtrim([AccountName]) As FullName, [AccountName], [ParentAcc],replace([ParentAcc],'.','') as PTAcc, [FullPath], [Level] FROM [Accounts] where level>=1"
+            UpdateCommand="UPDATE [Accounts] SET [AccountName] = @AccountName, [ParentAcc] = @ParentAcc, [FullPath] = @FullPath, [Level] = @Level WHERE [AccountNo] = @original_AccountNo AND [AccountName] = @original_AccountName AND (([ParentAcc] = @original_ParentAcc) OR ([ParentAcc] IS NULL AND @original_ParentAcc IS NULL)) AND (([FullPath] = @original_FullPath) OR ([FullPath] IS NULL AND @original_FullPath IS NULL)) AND (([Level] = @original_Level) OR ([Level] IS NULL AND @original_Level IS NULL))">
+            <DeleteParameters>
+                <asp:Parameter Name="original_AccountNo" Type="String" />
+                <asp:Parameter Name="original_AccountName" Type="String" />
+                <asp:Parameter Name="original_ParentAcc" Type="String" />
+                <asp:Parameter Name="original_FullPath" Type="String" />
+                <asp:Parameter Name="original_Level" Type="Int32" />
+            </DeleteParameters>
+            <InsertParameters>
+                <asp:Parameter Name="AccountNo" Type="String" />
+                <asp:Parameter Name="AccountName" Type="String" />
+                <asp:Parameter Name="ParentAcc" Type="String" />
+                <asp:Parameter Name="FullPath" Type="String" />
+                <asp:Parameter Name="Level" Type="Int32" />
+            </InsertParameters>
+            <UpdateParameters>
+                <asp:Parameter Name="AccountName" Type="String" />
+                <asp:Parameter Name="ParentAcc" Type="String" />
+                <asp:Parameter Name="FullPath" Type="String" />
+                <asp:Parameter Name="Level" Type="Int32" />
+                <asp:Parameter Name="original_AccountNo" Type="String" />
+                <asp:Parameter Name="original_AccountName" Type="String" />
+                <asp:Parameter Name="original_ParentAcc" Type="String" />
+                <asp:Parameter Name="original_FullPath" Type="String" />
+                <asp:Parameter Name="original_Level" Type="Int32" />
+            </UpdateParameters>
+        </asp:SqlDataSource>
+        <dx:ASPxPopupControl ID="Popup" runat="server" AllowDragging="false" AllowResize="true" ClientInstanceName="popup" Modal="true" PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter" ViewStateMode="Enabled" Width="100%">
+            <ClientSideEvents CloseUp="function(s,e){coa.PerformCallback();}" Init="puOnInit" />
+        </dx:ASPxPopupControl>
+    </div>
+</asp:Content>

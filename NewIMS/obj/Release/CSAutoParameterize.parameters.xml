@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="IMSDBConnectionString-Web.config Connection String" description="IMSDBConnectionString Connection String used in web.config by the application to access the database." defaultValue="Data source=.;initial catalog=IMS-DB; Integrated Security=SSPI; MultipleActiveResultSets=True; Persist Security Info=True; Connection Timeout=300;" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="F:\\ALMASAR\ Project\\NewIMS\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='IMSDBConnectionString']/@connectionString" />
+  </parameter>
+  <parameter name="IMSAccConnectionString-Web.config Connection String" description="IMSAccConnectionString Connection String used in web.config by the application to access the database." defaultValue="Data Source=.; Initial Catalog=IMS-DB; Integrated Security=SSPI; MultipleActiveResultSets=True; Persist Security Info=True; Connection Timeout=300;" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="F:\\ALMASAR\ Project\\NewIMS\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='IMSAccConnectionString']/@connectionString" />
+  </parameter>
+  <parameter name="CIMSDBConnectionString-Web.config Connection String" description="CIMSDBConnectionString Connection String used in web.config by the application to access the database." defaultValue="Data source=.; initial catalog=IMS-DB; Integrated Security=SSPI; MultipleActiveResultSets=True; Persist Security Info=True; Connection Timeout=300;" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="F:\\ALMASAR\ Project\\NewIMS\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='CIMSDBConnectionString']/@connectionString" />
+  </parameter>
+  <parameter name="AttachConString-Web.config Connection String" description="AttachConString Connection String used in web.config by the application to access the database." defaultValue="Data Source=.;Initial Catalog=AttachDB;Integrated Security =SSPI;MultipleActiveResultSets=True; Connection Timeout=300;" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="F:\\ALMASAR\ Project\\NewIMS\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='AttachConString']/@connectionString" />
+  </parameter>
+  <parameter name="IMS-DBConnectionString-Web.config Connection String" description="IMS-DBConnectionString Connection String used in web.config by the application to access the database." defaultValue="Data Source=.;Initial Catalog=IMS-DB;Integrated Security=True;Persist Security Info=True;MultipleActiveResultSets=True; Connection Timeout=300;" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="F:\\ALMASAR\ Project\\NewIMS\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='IMS-DBConnectionString']/@connectionString" />
+  </parameter>
+  <parameter name="AttachDBConnectionString-Web.config Connection String" description="AttachDBConnectionString Connection String used in web.config by the application to access the database." defaultValue="Data Source=.;Initial Catalog=AttachDB;Integrated Security=True;MultipleActiveResultSets=True; Connection Timeout=300;" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="F:\\ALMASAR\ Project\\NewIMS\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='AttachDBConnectionString']/@connectionString" />
+  </parameter>
+  <parameter name="AttachDB-Web.config Connection String" description="AttachDB Connection String used in web.config by the application to access the database." defaultValue="Data Source=.;Initial Catalog=AttachDB;Integrated Security = SSPI;MultipleActiveResultSets=True; Connection Timeout=300;" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="F:\\ALMASAR\ Project\\NewIMS\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='AttachDB']/@connectionString" />
+  </parameter>
+</parameters>

@@ -1,0 +1,22 @@
+﻿<%@ Page Title="" Language="vb" AutoEventWireup="false" MasterPageFile="~/Main.master" CodeBehind="COAVirtualMode.aspx.vb" Inherits=".COAVirtualMode" %>
+
+<%@ Register Assembly="DevExpress.Web.ASPxTreeList.v21.2, Version=21.2.15.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.Web.ASPxTreeList" TagPrefix="dx" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+        <div>
+          
+            <dx:ASPxTreeList ID="COA" ClientInstanceName="coa" runat="server"
+                AutoGenerateColumns="False"
+                KeyFieldName="AccountNo" ParentFieldName="ParentAcc"
+                OnVirtualModeCreateChildren="COA_VirtualModeCreateChildren"
+                OnVirtualModeNodeCreating="COA_VirtualModeNodeCreating"
+                VirtualMode="true">
+                <Columns>
+                    <dx:TreeListTextColumn FieldName="AccountNo" Caption="Account No" />
+                    <dx:TreeListTextColumn FieldName="AccountName" Caption="Account Name" />
+                    <dx:TreeListTextColumn FieldName="FullPath" Caption="Full Path" />
+                    <dx:TreeListTextColumn FieldName="Level" Caption="Level" />
+                    <dx:TreeListCheckColumn FieldName="TranscationAcc" Caption="Transaction Account" />
+                </Columns>
+            </dx:ASPxTreeList>
+              </div>
+</asp:Content>
