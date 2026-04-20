@@ -26,23 +26,23 @@ public class AuthService : IAuthService
     public async Task<ApiResult<LoginResponse>> LoginAsync(LoginRequest request)
     {
         var user = await _context.Users
-            .FirstOrDefaultAsync(u => u.AccountLogIn == request.Username && u.IsActive);
+            .FirstOrDefaultAsync(u => u.AccountLogIn == request.Username && !u.Stop);
 
         if (user == null)
             return ApiResult<LoginResponse>.Fail("Invalid username or password.");
 
-        if (string.IsNullOrEmpty(user.Password))
+        if (string.IsNullOrEmpty(user.AccountPassWord))
             return ApiResult<LoginResponse>.Fail("Account password not set.");
 
         bool passwordValid;
         try
         {
-            passwordValid = BCrypt.Net.BCrypt.Verify(request.Password, user.Password);
+            passwordValid = BCrypt.Net.BCrypt.Verify(request.Password, user.AccountPassWord);
         }
         catch
         {
             // Fallback: direct comparison for legacy non-hashed passwords
-            passwordValid = user.Password == request.Password;
+            passwordValid = user.AccountPassWord == request.Password;
         }
 
         if (!passwordValid)
@@ -60,7 +60,7 @@ public class AuthService : IAuthService
             User = new UserInfo
             {
                 AccountNo = user.AccountNo,
-                AccountName = user.AccountName,
+                AccountName = user.AccountName ?? "",
                 Username = user.AccountLogIn,
                 Branch = user.Branch,
                 Permissions = new PermissionsInfo
@@ -84,26 +84,28 @@ public class AuthService : IAuthService
         return Task.FromResult(ApiResult<LoginResponse>.Fail("Refresh token not implemented yet."));
     }
 
-    public async Task<ApiResult<bool>> ChangePasswordAsync(int accountNo, ChangePasswordRequest request)
+    public async Task<ApiResult<bool>> ChangePasswordAsync(string accountLogIn, ChangePasswordRequest request)
     {
-        var user = await _context.Users.FindAsync(accountNo);
+        var user = await _context.Users.FindAsync(accountLogIn);
         if (user == null)
             return ApiResult<bool>.Fail("User not found.");
 
         bool currentPasswordValid;
         try
         {
-            currentPasswordValid = BCrypt.Net.BCrypt.Verify(request.CurrentPassword, user.Password);
+            currentPasswordValid = BCrypt.Net.BCrypt.Verify(request.CurrentPassword, user.AccountPassWord);
         }
         catch
         {
-            currentPasswordValid = user.Password == request.CurrentPassword;
+            currentPasswordValid = user.AccountPassWord == request.CurrentPassword;
         }
 
         if (!currentPasswordValid)
             return ApiResult<bool>.Fail("Current password is incorrect.");
 
-        user.Password = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+        user.AccountPassWord = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+        user.ModifiedBy = accountLogIn;
+        user.ModifyDate = DateTime.UtcNow;
         await _context.SaveChangesAsync();
 
         return ApiResult<bool>.Ok(true, "Password changed successfully.");
@@ -120,14 +122,14 @@ public class AuthService : IAuthService
         {
             new(ClaimTypes.NameIdentifier, user.AccountNo.ToString()),
             new(ClaimTypes.Name, user.AccountLogIn),
-            new("AccountName", user.AccountName),
-            new("Branch", user.Branch ?? ""),
-            new("PermSys", user.AccountPermSys.ToString()),
-            new("PermClm", user.AccountPermClm.ToString()),
-            new("PermFin", user.AccountPermFin.ToString()),
-            new("PermRe", user.AccountPermRe.ToString()),
-            new("PermMan", user.AccountPermMan.ToString()),
-            new("SysManag", user.AccountSysManag.ToString()),
+            new("AccountName", user.AccountName ?? ""),
+            new("Branch", user.Branch),
+            new("PermSys", user.AccountPermSys),
+            new("PermClm", user.AccountPermClm),
+            new("PermFin", user.AccountPermFin),
+            new("PermRe", user.AccountPermRe),
+            new("PermMan", user.AccountPermMan),
+            new("SysManag", user.AccountSysManag ?? ""),
         };
 
         var token = new JwtSecurityToken(

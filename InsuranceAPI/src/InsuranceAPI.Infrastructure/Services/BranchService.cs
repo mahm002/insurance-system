@@ -55,14 +55,18 @@ public class BranchService : IBranchService
         var branch = new Domain.Entities.Branch
         {
             BranchNo = request.BranchNo,
+            BranchCode = request.BranchCode,
             BranchName = request.BranchName,
-            BranchNameE = request.BranchNameE,
+            BranchNameEn = request.BranchNameEn,
             Address = request.Address,
-            TelNo = request.TelNo,
+            Telephone = request.Telephone,
             FaxNo = request.FaxNo,
-            Email = request.Email,
+            EMail = request.EMail,
             ManagerId = request.ManagerId,
-            IsActive = true
+            AccountingCode = request.AccountingCode,
+            SystemURI = string.Empty,
+            CashierAccount = string.Empty,
+            ChequeAccount = string.Empty
         };
 
         _context.Branches.Add(branch);
@@ -78,15 +82,15 @@ public class BranchService : IBranchService
             return ApiResult<BranchDto>.Fail("Branch not found.");
 
         branch.BranchName = request.BranchName;
-        branch.BranchNameE = request.BranchNameE;
+        branch.BranchNameEn = request.BranchNameEn;
         branch.Address = request.Address;
-        branch.TelNo = request.TelNo;
+        branch.Telephone = request.Telephone;
         branch.FaxNo = request.FaxNo;
-        branch.Email = request.Email;
+        branch.EMail = request.EMail;
         branch.ManagerId = request.ManagerId;
-        branch.CashierAccount = request.CashierAccount;
-        branch.ChequeAccount = request.ChequeAccount;
-        branch.IsActive = request.IsActive;
+        branch.CashierAccount = request.CashierAccount ?? branch.CashierAccount;
+        branch.ChequeAccount = request.ChequeAccount ?? branch.ChequeAccount;
+        branch.AccountingCode = request.AccountingCode;
 
         await _context.SaveChangesAsync();
 
@@ -99,25 +103,28 @@ public class BranchService : IBranchService
         if (branch == null)
             return ApiResult<bool>.Fail("Branch not found.");
 
-        branch.IsActive = false;
+        _context.Branches.Remove(branch);
         await _context.SaveChangesAsync();
 
-        return ApiResult<bool>.Ok(true, "Branch deactivated successfully.");
+        return ApiResult<bool>.Ok(true, "Branch deleted successfully.");
     }
 
     private static BranchDto MapToDto(Domain.Entities.Branch branch) => new()
     {
         BranchNo = branch.BranchNo,
+        BranchCode = branch.BranchCode,
+        Agent = branch.Agent,
         BranchName = branch.BranchName,
-        BranchNameE = branch.BranchNameE,
+        BranchNameEn = branch.BranchNameEn,
         Address = branch.Address,
-        TelNo = branch.TelNo,
+        Telephone = branch.Telephone,
         FaxNo = branch.FaxNo,
-        Email = branch.Email,
+        EMail = branch.EMail,
         ManagerId = branch.ManagerId,
         CashierAccount = branch.CashierAccount,
         ChequeAccount = branch.ChequeAccount,
         AccountingCode = branch.AccountingCode,
-        IsActive = branch.IsActive
+        MainCenter = branch.MainCenter,
+        CompanyOffice = branch.CompanyOffice
     };
 }

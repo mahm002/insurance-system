@@ -1,15 +1,19 @@
 namespace InsuranceAPI.Domain.Entities;
 
+/// <summary>
+/// Maps to MainSattelement table.
+/// PK: (ClmNo, TPID, No) composite key.
+/// </summary>
 public class ClaimSettlement
 {
-    public int Id { get; set; }
     public string ClmNo { get; set; } = string.Empty;
-    public string? PolNo { get; set; }
-    public int SettlNo { get; set; }
-    public decimal? Amount { get; set; }
-    public string? Description { get; set; }
-    public DateTime? SettlDate { get; set; }
-    public string? SettlUser { get; set; }
-    public string? Branch { get; set; }
-    public bool? IsPaid { get; set; }
+    public short TPID { get; set; }
+    public int No { get; set; }
+    public string PayTo { get; set; } = string.Empty;
+    public string SettelementDesc { get; set; } = string.Empty;
+    public DateTime Date { get; set; }
+    public string? DAILYNUM { get; set; }
+    public DateTime? DAILYDTE { get; set; }
+    public string? UserName { get; set; }
+    public long SerNo { get; set; }
 }

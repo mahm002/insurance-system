@@ -15,9 +15,9 @@ public class UserService : IUserService
         _context = context;
     }
 
-    public async Task<ApiResult<UserDto>> GetByIdAsync(int accountNo)
+    public async Task<ApiResult<UserDto>> GetByIdAsync(string accountLogIn)
     {
-        var user = await _context.Users.FindAsync(accountNo);
+        var user = await _context.Users.FindAsync(accountLogIn);
         if (user == null)
             return ApiResult<UserDto>.Fail("User not found.");
 
@@ -56,7 +56,7 @@ public class UserService : IUserService
         {
             AccountLogIn = request.AccountLogIn,
             AccountName = request.AccountName,
-            Password = BCrypt.Net.BCrypt.HashPassword(request.Password),
+            AccountPassWord = BCrypt.Net.BCrypt.HashPassword(request.Password),
             Branch = request.Branch,
             AccountPermSys = request.AccountPermSys,
             AccountPermClm = request.AccountPermClm,
@@ -65,7 +65,10 @@ public class UserService : IUserService
             AccountPermMan = request.AccountPermMan,
             AccountSysManag = request.AccountSysManag,
             AccLimit = request.AccLimit,
-            IsActive = true
+            AddedBy = request.AccountLogIn,
+            ModifiedBy = request.AccountLogIn,
+            ModifyDate = DateTime.UtcNow,
+            Stop = false
         };
 
         _context.Users.Add(user);
@@ -74,9 +77,9 @@ public class UserService : IUserService
         return ApiResult<UserDto>.Ok(MapToDto(user), "User created successfully.");
     }
 
-    public async Task<ApiResult<UserDto>> UpdateAsync(int accountNo, UpdateUserRequest request)
+    public async Task<ApiResult<UserDto>> UpdateAsync(string accountLogIn, UpdateUserRequest request)
     {
-        var user = await _context.Users.FindAsync(accountNo);
+        var user = await _context.Users.FindAsync(accountLogIn);
         if (user == null)
             return ApiResult<UserDto>.Fail("User not found.");
 
@@ -89,32 +92,38 @@ public class UserService : IUserService
         user.AccountPermMan = request.AccountPermMan;
         user.AccountSysManag = request.AccountSysManag;
         user.AccLimit = request.AccLimit;
-        user.IsActive = request.IsActive;
+        user.Stop = request.Stop;
+        user.ModifiedBy = accountLogIn;
+        user.ModifyDate = DateTime.UtcNow;
 
         await _context.SaveChangesAsync();
 
         return ApiResult<UserDto>.Ok(MapToDto(user), "User updated successfully.");
     }
 
-    public async Task<ApiResult<bool>> DeleteAsync(int accountNo)
+    public async Task<ApiResult<bool>> DeleteAsync(string accountLogIn)
     {
-        var user = await _context.Users.FindAsync(accountNo);
+        var user = await _context.Users.FindAsync(accountLogIn);
         if (user == null)
             return ApiResult<bool>.Fail("User not found.");
 
-        user.IsActive = false;
+        user.Stop = true;
+        user.ModifiedBy = accountLogIn;
+        user.ModifyDate = DateTime.UtcNow;
         await _context.SaveChangesAsync();
 
         return ApiResult<bool>.Ok(true, "User deactivated successfully.");
     }
 
-    public async Task<ApiResult<bool>> ResetPasswordAsync(int accountNo, string newPassword)
+    public async Task<ApiResult<bool>> ResetPasswordAsync(string accountLogIn, string newPassword)
     {
-        var user = await _context.Users.FindAsync(accountNo);
+        var user = await _context.Users.FindAsync(accountLogIn);
         if (user == null)
             return ApiResult<bool>.Fail("User not found.");
 
-        user.Password = BCrypt.Net.BCrypt.HashPassword(newPassword);
+        user.AccountPassWord = BCrypt.Net.BCrypt.HashPassword(newPassword);
+        user.ModifiedBy = accountLogIn;
+        user.ModifyDate = DateTime.UtcNow;
         await _context.SaveChangesAsync();
 
         return ApiResult<bool>.Ok(true, "Password reset successfully.");
@@ -133,6 +142,6 @@ public class UserService : IUserService
         AccountPermMan = user.AccountPermMan,
         AccountSysManag = user.AccountSysManag,
         AccLimit = user.AccLimit,
-        IsActive = user.IsActive
+        Stop = user.Stop
     };
 }

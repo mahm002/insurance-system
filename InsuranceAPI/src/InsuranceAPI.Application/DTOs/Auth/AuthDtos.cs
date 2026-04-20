@@ -25,12 +25,12 @@ public class UserInfo
 
 public class PermissionsInfo
 {
-    public int System { get; set; }
-    public int Claims { get; set; }
-    public int Finance { get; set; }
-    public int Reinsurance { get; set; }
-    public int Management { get; set; }
-    public int SysAdmin { get; set; }
+    public string System { get; set; } = string.Empty;
+    public string Claims { get; set; } = string.Empty;
+    public string Finance { get; set; } = string.Empty;
+    public string Reinsurance { get; set; } = string.Empty;
+    public string Management { get; set; } = string.Empty;
+    public string? SysAdmin { get; set; }
 }
 
 public class ChangePasswordRequest

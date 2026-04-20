@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace InsuranceAPI.WebAPI.Controllers;
 
 [ApiController]
-[Route("api/admin/[controller]")]
+[Route("api/admin/agent-commissions")]
 [Authorize]
 public class AgentsController : ControllerBase
 {
@@ -24,10 +24,10 @@ public class AgentsController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("{agentNo}")]
-    public async Task<IActionResult> GetById(int agentNo)
+    [HttpGet("{agentNo}/{subIns}")]
+    public async Task<IActionResult> GetById(string agentNo, string subIns)
     {
-        var result = await _agentService.GetByIdAsync(agentNo);
+        var result = await _agentService.GetByIdAsync(agentNo, subIns);
         if (!result.Success)
             return NotFound(result);
 
@@ -35,29 +35,30 @@ public class AgentsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateAgentRequest request)
+    public async Task<IActionResult> Create([FromBody] CreateAgentCommissionRequest request)
     {
         var result = await _agentService.CreateAsync(request);
         if (!result.Success)
             return BadRequest(result);
 
-        return CreatedAtAction(nameof(GetById), new { agentNo = result.Data!.AgentNo }, result);
+        return CreatedAtAction(nameof(GetById),
+            new { agentNo = result.Data!.AgentNo, subIns = result.Data.SubIns }, result);
     }
 
-    [HttpPut("{agentNo}")]
-    public async Task<IActionResult> Update(int agentNo, [FromBody] UpdateAgentRequest request)
+    [HttpPut("{agentNo}/{subIns}")]
+    public async Task<IActionResult> Update(string agentNo, string subIns, [FromBody] UpdateAgentCommissionRequest request)
     {
-        var result = await _agentService.UpdateAsync(agentNo, request);
+        var result = await _agentService.UpdateAsync(agentNo, subIns, request);
         if (!result.Success)
             return NotFound(result);
 
         return Ok(result);
     }
 
-    [HttpDelete("{agentNo}")]
-    public async Task<IActionResult> Delete(int agentNo)
+    [HttpDelete("{agentNo}/{subIns}")]
+    public async Task<IActionResult> Delete(string agentNo, string subIns)
     {
-        var result = await _agentService.DeleteAsync(agentNo);
+        var result = await _agentService.DeleteAsync(agentNo, subIns);
         if (!result.Success)
             return NotFound(result);
 

@@ -41,11 +41,11 @@ public class AuthController : ControllerBase
     [HttpPost("change-password")]
     public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
     {
-        var accountNoStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (!int.TryParse(accountNoStr, out var accountNo))
+        var accountLogIn = User.FindFirstValue(ClaimTypes.Name);
+        if (string.IsNullOrEmpty(accountLogIn))
             return Unauthorized();
 
-        var result = await _authService.ChangePasswordAsync(accountNo, request);
+        var result = await _authService.ChangePasswordAsync(accountLogIn, request);
         if (!result.Success)
             return BadRequest(result);
 
@@ -64,12 +64,12 @@ public class AuthController : ControllerBase
             Branch = User.FindFirstValue("Branch"),
             Permissions = new PermissionsInfo
             {
-                System = int.Parse(User.FindFirstValue("PermSys") ?? "0"),
-                Claims = int.Parse(User.FindFirstValue("PermClm") ?? "0"),
-                Finance = int.Parse(User.FindFirstValue("PermFin") ?? "0"),
-                Reinsurance = int.Parse(User.FindFirstValue("PermRe") ?? "0"),
-                Management = int.Parse(User.FindFirstValue("PermMan") ?? "0"),
-                SysAdmin = int.Parse(User.FindFirstValue("SysManag") ?? "0")
+                System = User.FindFirstValue("PermSys") ?? "",
+                Claims = User.FindFirstValue("PermClm") ?? "",
+                Finance = User.FindFirstValue("PermFin") ?? "",
+                Reinsurance = User.FindFirstValue("PermRe") ?? "",
+                Management = User.FindFirstValue("PermMan") ?? "",
+                SysAdmin = User.FindFirstValue("SysManag")
             }
         };
 

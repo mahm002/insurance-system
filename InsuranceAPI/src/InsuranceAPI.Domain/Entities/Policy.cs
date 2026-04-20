@@ -1,7 +1,11 @@
-using InsuranceAPI.Domain.Enums;
-
 namespace InsuranceAPI.Domain.Entities;
 
+/// <summary>
+/// Maps to PolicyFile table. PolicyFile schema was not included in the provided DB script
+/// (likely truncated). This entity will be updated once the full PolicyFile CREATE TABLE
+/// statement is provided. Current fields are based on VB.NET code analysis.
+/// PK: (OrderNo, EndNo, LoadNo, SubIns) composite key.
+/// </summary>
 public class Policy
 {
     public string OrderNo { get; set; } = string.Empty;
@@ -9,18 +13,18 @@ public class Policy
     public int EndNo { get; set; }
     public int LoadNo { get; set; }
     public string SubIns { get; set; } = string.Empty;
-    public int CustNo { get; set; }
+    public long CustNo { get; set; }
     public string? Branch { get; set; }
     public DateTime? CoverFrom { get; set; }
     public DateTime? CoverTo { get; set; }
-    public decimal NetPRM { get; set; }
-    public decimal TOTPRM { get; set; }
-    public decimal? SumInsured { get; set; }
-    public decimal? Tax { get; set; }
-    public decimal? Stamp { get; set; }
-    public decimal? Supervision { get; set; }
-    public decimal? IssueFee { get; set; }
-    public decimal? Inbox { get; set; }
+    public double NetPRM { get; set; }
+    public double TOTPRM { get; set; }
+    public double? SumInsured { get; set; }
+    public double? Tax { get; set; }
+    public double? Stamp { get; set; }
+    public double? Supervision { get; set; }
+    public double? IssueFee { get; set; }
+    public double? Inbox { get; set; }
     public bool? Issued { get; set; }
     public bool? Financed { get; set; }
     public bool? Stopped { get; set; }
@@ -29,9 +33,9 @@ public class Policy
     public int? SerialNo { get; set; }
     public string? Note { get; set; }
     public int? AgentNo { get; set; }
-    public decimal? AgentComm { get; set; }
+    public double? AgentComm { get; set; }
     public string? CurrencyCode { get; set; }
-    public decimal? ExchangeRate { get; set; }
+    public double? ExchangeRate { get; set; }
 
     // Navigation
     public Customer? Customer { get; set; }

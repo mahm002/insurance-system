@@ -1,15 +1,14 @@
 namespace InsuranceAPI.Domain.Entities;
 
-public class Agent
+/// <summary>
+/// Maps to AgentsCommisions table. Agents are branches with Agent=1 in BranchInfo.
+/// This table stores per-SubIns commission rates and account numbers for each agent.
+/// </summary>
+public class AgentCommission
 {
-    public int AgentNo { get; set; }
-    public string AgentName { get; set; } = string.Empty;
-    public string? AgentNameE { get; set; }
-    public string? Address { get; set; }
-    public string? TelNo { get; set; }
-    public string? Email { get; set; }
-    public string? Branch { get; set; }
-    public decimal? CommissionRate { get; set; }
-    public string? AccNo { get; set; }
-    public bool IsActive { get; set; } = true;
+    public long Id { get; set; }
+    public string AgentNo { get; set; } = string.Empty;
+    public string SubIns { get; set; } = string.Empty;
+    public decimal Comm { get; set; }
+    public string AccountNo { get; set; } = string.Empty;
 }

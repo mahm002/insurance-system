@@ -15,7 +15,7 @@ public class CustomerService : ICustomerService
         _context = context;
     }
 
-    public async Task<ApiResult<CustomerDto>> GetByIdAsync(int custNo)
+    public async Task<ApiResult<CustomerDto>> GetByIdAsync(long custNo)
     {
         var customer = await _context.Customers.FindAsync(custNo);
         if (customer == null)
@@ -32,9 +32,9 @@ public class CustomerService : ICustomerService
         {
             query = query.Where(c =>
                 c.CustName.Contains(search) ||
-                (c.CustNameE != null && c.CustNameE.Contains(search)) ||
-                (c.NationalId != null && c.NationalId.Contains(search)) ||
-                (c.TelNo != null && c.TelNo.Contains(search)));
+                c.CustNameE.Contains(search) ||
+                c.IDNo.Contains(search) ||
+                c.TelNo.Contains(search));
         }
 
         var totalCount = await query.CountAsync();
@@ -60,16 +60,18 @@ public class CustomerService : ICustomerService
     {
         var customer = new Domain.Entities.Customer
         {
+            CustNo = request.CustNo,
+            CustTP = request.CustTP,
             CustName = request.CustName,
             CustNameE = request.CustNameE,
+            IDNo = request.IDNo,
+            DrCardNo = request.DrCardNo,
             TelNo = request.TelNo,
             Address = request.Address,
             Email = request.Email,
             SpecialCase = request.SpecialCase,
-            Branch = request.Branch,
-            NationalId = request.NationalId,
-            PassportNo = request.PassportNo,
-            DateOfBirth = request.DateOfBirth
+            RecDate = DateTime.UtcNow,
+            FaxNo = string.Empty
         };
 
         _context.Customers.Add(customer);
@@ -78,7 +80,7 @@ public class CustomerService : ICustomerService
         return ApiResult<CustomerDto>.Ok(MapToDto(customer), "Customer created successfully.");
     }
 
-    public async Task<ApiResult<CustomerDto>> UpdateAsync(int custNo, UpdateCustomerRequest request)
+    public async Task<ApiResult<CustomerDto>> UpdateAsync(long custNo, UpdateCustomerRequest request)
     {
         var customer = await _context.Customers.FindAsync(custNo);
         if (customer == null)
@@ -86,21 +88,19 @@ public class CustomerService : ICustomerService
 
         customer.CustName = request.CustName;
         customer.CustNameE = request.CustNameE;
+        customer.IDNo = request.IDNo;
+        customer.DrCardNo = request.DrCardNo;
         customer.TelNo = request.TelNo;
         customer.Address = request.Address;
         customer.Email = request.Email;
         customer.SpecialCase = request.SpecialCase;
-        customer.Branch = request.Branch;
-        customer.NationalId = request.NationalId;
-        customer.PassportNo = request.PassportNo;
-        customer.DateOfBirth = request.DateOfBirth;
 
         await _context.SaveChangesAsync();
 
         return ApiResult<CustomerDto>.Ok(MapToDto(customer), "Customer updated successfully.");
     }
 
-    public async Task<ApiResult<bool>> DeleteAsync(int custNo)
+    public async Task<ApiResult<bool>> DeleteAsync(long custNo)
     {
         var customer = await _context.Customers.FindAsync(custNo);
         if (customer == null)
@@ -115,16 +115,15 @@ public class CustomerService : ICustomerService
     private static CustomerDto MapToDto(Domain.Entities.Customer c) => new()
     {
         CustNo = c.CustNo,
+        CustTP = c.CustTP,
         CustName = c.CustName,
         CustNameE = c.CustNameE,
+        IDNo = c.IDNo,
+        DrCardNo = c.DrCardNo,
         TelNo = c.TelNo,
         Address = c.Address,
         Email = c.Email,
         SpecialCase = c.SpecialCase,
-        AccNo = c.AccNo,
-        Branch = c.Branch,
-        NationalId = c.NationalId,
-        PassportNo = c.PassportNo,
-        DateOfBirth = c.DateOfBirth
+        AccNo = c.AccNo
     };
 }

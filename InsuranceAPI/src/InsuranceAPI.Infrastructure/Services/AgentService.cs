@@ -15,27 +15,28 @@ public class AgentService : IAgentService
         _context = context;
     }
 
-    public async Task<ApiResult<AgentDto>> GetByIdAsync(int agentNo)
+    public async Task<ApiResult<AgentCommissionDto>> GetByIdAsync(string agentNo, string subIns)
     {
-        var agent = await _context.Agents.FindAsync(agentNo);
+        var agent = await _context.AgentCommissions.FindAsync(agentNo, subIns);
         if (agent == null)
-            return ApiResult<AgentDto>.Fail("Agent not found.");
+            return ApiResult<AgentCommissionDto>.Fail("Agent commission not found.");
 
-        return ApiResult<AgentDto>.Ok(MapToDto(agent));
+        return ApiResult<AgentCommissionDto>.Ok(MapToDto(agent));
     }
 
-    public async Task<ApiResult<PaginatedResult<AgentDto>>> GetAllAsync(int page = 1, int pageSize = 20)
+    public async Task<ApiResult<PaginatedResult<AgentCommissionDto>>> GetAllAsync(int page = 1, int pageSize = 20)
     {
-        var query = _context.Agents.AsQueryable();
+        var query = _context.AgentCommissions.AsQueryable();
         var totalCount = await query.CountAsync();
 
         var agents = await query
             .OrderBy(a => a.AgentNo)
+            .ThenBy(a => a.SubIns)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
 
-        var result = new PaginatedResult<AgentDto>
+        var result = new PaginatedResult<AgentCommissionDto>
         {
             Items = agents.Select(MapToDto),
             TotalCount = totalCount,
@@ -43,72 +44,62 @@ public class AgentService : IAgentService
             PageSize = pageSize
         };
 
-        return ApiResult<PaginatedResult<AgentDto>>.Ok(result);
+        return ApiResult<PaginatedResult<AgentCommissionDto>>.Ok(result);
     }
 
-    public async Task<ApiResult<AgentDto>> CreateAsync(CreateAgentRequest request)
+    public async Task<ApiResult<AgentCommissionDto>> CreateAsync(CreateAgentCommissionRequest request)
     {
-        var agent = new Domain.Entities.Agent
+        var exists = await _context.AgentCommissions
+            .AnyAsync(a => a.AgentNo == request.AgentNo && a.SubIns == request.SubIns);
+        if (exists)
+            return ApiResult<AgentCommissionDto>.Fail("Agent commission for this SubIns already exists.");
+
+        var agent = new Domain.Entities.AgentCommission
         {
-            AgentName = request.AgentName,
-            AgentNameE = request.AgentNameE,
-            Address = request.Address,
-            TelNo = request.TelNo,
-            Email = request.Email,
-            Branch = request.Branch,
-            CommissionRate = request.CommissionRate,
-            IsActive = true
+            AgentNo = request.AgentNo,
+            SubIns = request.SubIns,
+            Comm = request.Comm,
+            AccountNo = request.AccountNo
         };
 
-        _context.Agents.Add(agent);
+        _context.AgentCommissions.Add(agent);
         await _context.SaveChangesAsync();
 
-        return ApiResult<AgentDto>.Ok(MapToDto(agent), "Agent created successfully.");
+        return ApiResult<AgentCommissionDto>.Ok(MapToDto(agent), "Agent commission created successfully.");
     }
 
-    public async Task<ApiResult<AgentDto>> UpdateAsync(int agentNo, UpdateAgentRequest request)
+    public async Task<ApiResult<AgentCommissionDto>> UpdateAsync(string agentNo, string subIns, UpdateAgentCommissionRequest request)
     {
-        var agent = await _context.Agents.FindAsync(agentNo);
+        var agent = await _context.AgentCommissions.FindAsync(agentNo, subIns);
         if (agent == null)
-            return ApiResult<AgentDto>.Fail("Agent not found.");
+            return ApiResult<AgentCommissionDto>.Fail("Agent commission not found.");
 
-        agent.AgentName = request.AgentName;
-        agent.AgentNameE = request.AgentNameE;
-        agent.Address = request.Address;
-        agent.TelNo = request.TelNo;
-        agent.Email = request.Email;
-        agent.Branch = request.Branch;
-        agent.CommissionRate = request.CommissionRate;
-        agent.IsActive = request.IsActive;
+        agent.Comm = request.Comm;
+        agent.AccountNo = request.AccountNo;
 
         await _context.SaveChangesAsync();
 
-        return ApiResult<AgentDto>.Ok(MapToDto(agent), "Agent updated successfully.");
+        return ApiResult<AgentCommissionDto>.Ok(MapToDto(agent), "Agent commission updated successfully.");
     }
 
-    public async Task<ApiResult<bool>> DeleteAsync(int agentNo)
+    public async Task<ApiResult<bool>> DeleteAsync(string agentNo, string subIns)
     {
-        var agent = await _context.Agents.FindAsync(agentNo);
+        var agent = await _context.AgentCommissions.FindAsync(agentNo, subIns);
         if (agent == null)
-            return ApiResult<bool>.Fail("Agent not found.");
+            return ApiResult<bool>.Fail("Agent commission not found.");
 
-        agent.IsActive = false;
+        _context.AgentCommissions.Remove(agent);
         await _context.SaveChangesAsync();
 
-        return ApiResult<bool>.Ok(true, "Agent deactivated successfully.");
+        return ApiResult<bool>.Ok(true, "Agent commission deleted successfully.");
     }
 
-    private static AgentDto MapToDto(Domain.Entities.Agent a) => new()
+    private static AgentCommissionDto MapToDto(Domain.Entities.AgentCommission a) => new()
     {
+        Id = a.Id,
         AgentNo = a.AgentNo,
-        AgentName = a.AgentName,
-        AgentNameE = a.AgentNameE,
-        Address = a.Address,
-        TelNo = a.TelNo,
-        Email = a.Email,
-        Branch = a.Branch,
-        CommissionRate = a.CommissionRate,
-        AccNo = a.AccNo,
-        IsActive = a.IsActive
+        SubIns = a.SubIns,
+        Comm = a.Comm,
+        AccountNo = a.AccountNo
     };
 }

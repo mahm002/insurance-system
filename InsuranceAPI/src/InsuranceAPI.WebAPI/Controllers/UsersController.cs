@@ -24,10 +24,10 @@ public class UsersController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("{accountNo}")]
-    public async Task<IActionResult> GetById(int accountNo)
+    [HttpGet("{accountLogIn}")]
+    public async Task<IActionResult> GetById(string accountLogIn)
     {
-        var result = await _userService.GetByIdAsync(accountNo);
+        var result = await _userService.GetByIdAsync(accountLogIn);
         if (!result.Success)
             return NotFound(result);
 
@@ -41,33 +41,33 @@ public class UsersController : ControllerBase
         if (!result.Success)
             return BadRequest(result);
 
-        return CreatedAtAction(nameof(GetById), new { accountNo = result.Data!.AccountNo }, result);
+        return CreatedAtAction(nameof(GetById), new { accountLogIn = result.Data!.AccountLogIn }, result);
     }
 
-    [HttpPut("{accountNo}")]
-    public async Task<IActionResult> Update(int accountNo, [FromBody] UpdateUserRequest request)
+    [HttpPut("{accountLogIn}")]
+    public async Task<IActionResult> Update(string accountLogIn, [FromBody] UpdateUserRequest request)
     {
-        var result = await _userService.UpdateAsync(accountNo, request);
+        var result = await _userService.UpdateAsync(accountLogIn, request);
         if (!result.Success)
             return NotFound(result);
 
         return Ok(result);
     }
 
-    [HttpDelete("{accountNo}")]
-    public async Task<IActionResult> Delete(int accountNo)
+    [HttpDelete("{accountLogIn}")]
+    public async Task<IActionResult> Delete(string accountLogIn)
     {
-        var result = await _userService.DeleteAsync(accountNo);
+        var result = await _userService.DeleteAsync(accountLogIn);
         if (!result.Success)
             return NotFound(result);
 
         return Ok(result);
     }
 
-    [HttpPost("{accountNo}/reset-password")]
-    public async Task<IActionResult> ResetPassword(int accountNo, [FromBody] ResetPasswordRequest request)
+    [HttpPost("{accountLogIn}/reset-password")]
+    public async Task<IActionResult> ResetPassword(string accountLogIn, [FromBody] ResetPasswordRequest request)
     {
-        var result = await _userService.ResetPasswordAsync(accountNo, request.NewPassword);
+        var result = await _userService.ResetPasswordAsync(accountLogIn, request.NewPassword);
         if (!result.Success)
             return NotFound(result);
 

@@ -27,8 +27,8 @@ public class CustomersController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("{custNo}")]
-    public async Task<IActionResult> GetById(int custNo)
+    [HttpGet("{custNo:long}")]
+    public async Task<IActionResult> GetById(long custNo)
     {
         var result = await _customerService.GetByIdAsync(custNo);
         if (!result.Success)
@@ -47,8 +47,8 @@ public class CustomersController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { custNo = result.Data!.CustNo }, result);
     }
 
-    [HttpPut("{custNo}")]
-    public async Task<IActionResult> Update(int custNo, [FromBody] UpdateCustomerRequest request)
+    [HttpPut("{custNo:long}")]
+    public async Task<IActionResult> Update(long custNo, [FromBody] UpdateCustomerRequest request)
     {
         var result = await _customerService.UpdateAsync(custNo, request);
         if (!result.Success)
@@ -57,8 +57,8 @@ public class CustomersController : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete("{custNo}")]
-    public async Task<IActionResult> Delete(int custNo)
+    [HttpDelete("{custNo:long}")]
+    public async Task<IActionResult> Delete(long custNo)
     {
         var result = await _customerService.DeleteAsync(custNo);
         if (!result.Success)
